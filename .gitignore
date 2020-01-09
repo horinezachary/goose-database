@@ -1,2 +1,7 @@
-config.js
 node_modules
+
+# password file
+config.js
+
+# server environment variables file
+ecosystem.config.js
