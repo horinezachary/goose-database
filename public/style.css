@@ -1,0 +1,64 @@
+footer {
+   background: gray;
+}
+
+footer a {
+   color: white;
+}
+a {
+   color: inherit;
+}
+body{
+   background: gray;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
+}
+.page-header,
+.page-footer {
+  flex-shrink: 0; /* Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. */
+}
+.content {
+   margin-top: 1rem;
+   margin-bottom: 1rem;
+  flex: 1 0 auto; /* Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. */
+}
+
+.hidden {
+   display: none;
+}
+
+.float-right {
+   float: right;
+}
+
+.lh-0 {
+   line-height: 0;
+}
+
+.indent {
+   margin-left: 1rem;
+}
+
+.list {
+   margin: 0 auto;
+}
+
+.green-gradient {
+   background: -webkit-linear-gradient(50deg,#3ca832,#196312)!important;
+   background: -o-linear-gradient(50deg,#3ca832,#196312)!important;
+   background: linear-gradient(40deg,#3ca832,#196312)!important;
+}
+
+.container {
+  display: inline;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
