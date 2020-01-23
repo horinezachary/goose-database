@@ -29,6 +29,21 @@ body{
    float: left;
 }
 
+.recipe-info {
+   margin-top: 5px;
+   display: flex;
+   border-width: thin;
+   border-style: solid;
+   padding: 10px 10px 5px 10px;
+   border-left-style: hidden;
+   border-right-style: hidden;
+}
+
+.recipe-info h6 {
+   padding-right: 5px;
+   padding-left: 5px;
+}
+
 .section-header {
    margin-left: 1rem;
 }
