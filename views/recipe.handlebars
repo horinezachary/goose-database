@@ -7,4 +7,21 @@
          <h6 class="recipe-author float-left">{{recipe.author}} - {{recipe.date}}</h6>
       </div>
    </div>
+   <h3 class="section-header">Ingredients</h3>
+   <ul class="list-group list-group-flush recipe-body">
+
+      {{#each ingredient}}
+         <li class="list-group-item recipe-ingredient">
+            <p>{{size}} {{measurement}} {{name}}</p>
+         </li>
+      {{/each}}
+   </ul>
+   <h3 class="section-header">Instructions</h3>
+   <ul class="list-group list-group-flush recipe-body">
+      {{#each instruction}}
+         <li class="list-group-item recipe-instruction">
+            <p>{{step}}. {{text}}</p>
+         </li>
+      {{/each}}
+   </ul>
 </div>

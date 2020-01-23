@@ -32,6 +32,15 @@ body{
    display: block;
 }
 
+.section-header {
+   margin-left: 1rem;
+}
+
+.recipe-body li {
+   margin-left: 2rem;
+   border-width: 0rem;
+}
+
 
 .hidden {
    display: none;
