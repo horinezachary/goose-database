@@ -28,9 +28,6 @@ body{
    display: grid;
    float: left;
 }
-.header-line {
-   display: block;
-}
 
 .section-header {
    margin-left: 1rem;
