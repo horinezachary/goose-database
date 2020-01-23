@@ -32,6 +32,19 @@ app.get('/', function (req, res, next) {
    })
 });
 
+app.get('/recipe', function (req, res, next) {
+   var recipe = {title: "Test", author: "John Doe", date: "11/01/2012"};
+   var ingredients = {1:{size: 1, measurement: "cup", name: "sugar"}};
+   var instructions = {1:{step: 1, text: "Add one cup of sugar to the bowl."}};
+   res.status(200).render('recipe', {
+      title: 'Test Recipe',
+      recipe: recipe,
+      ingredient: ingredients,
+      instruction: instructions,
+      layout: 'main'
+   })
+});
+
 
 
 app.get('*', function (req, res) {
