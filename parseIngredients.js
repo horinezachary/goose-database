@@ -8,12 +8,13 @@ const other = ["piece"];
 const otherAbbr = ["pc"];
 const defaultmeasurement = "unit";
 
+/*
 console.log(parseIngredient("12 fluid ounces milk"));
 console.log(parseIngredient("1/2 of an ass"));
 console.log(parseIngredient("1 2oz fart"));
 console.log(parseIngredient("3 2oz yogurts"));
 console.log(parseIngredient("1 cup of brandy"));
-
+*/
 
 
 function parseIngredient(string) {
@@ -147,8 +148,6 @@ function checkCombined(str1, str2) {
    //var split = str1.split(str1.indexOf(str1.match(/[a-z]/)));
    var split1 = str1.slice(0,str1.indexOf(str1.match(/[\-a-z]/)));
    var split2 = str1.slice(str1.indexOf(str1.match(/[\-a-z]/)));
-   console.log("s1: " + split1);
-   console.log("s2: " + split2);
    var num = getNumber(split1);
    if (num == false) {
       return false;
