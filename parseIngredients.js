@@ -4,6 +4,8 @@ const volume = ["gallon", "quart", "pint", "cup", "fluid ounce", "tablespoon", "
 const volumeAbbr = ["gal","qt","pt","cp","floz","tbsp","tsp","ml","l"];
 const length = ["inch","centimeter"];
 const lengthAbbr = ["in", "cm"];
+const other = ["piece"];
+const otherAbbr = ["pc"];
 const defaultmeasurement = "unit";
 
 console.log(parseIngredient("12 fluid ounces milk"));
@@ -104,14 +106,20 @@ function isMeasurement(str1, str2) {
    }
    for (i = 0; i < weight.length; i++) {
       if (str1.match('^('+weight[i]+')[s]{0,1}$|^('+weightAbbr[i]+')[s]{0,1}[.]{0,1}$')) {
-         //is volume
+         //is weight
          return weight[i];
       }
    }
-   for (i = 0; i < weight.length; i++) {
+   for (i = 0; i < length.length; i++) {
       if (str1.match('^('+length[i]+')[e]{0,1}[s]{0,1}$|^('+lengthAbbr[i]+')[s]{0,1}[.]{0,1}$')) {
-         //is volume
-         return weight[i];
+         //is length
+         return length[i];
+      }
+   }
+   for (i = 0; i < other.length; i++) {
+      if (str1.match('^('+other[i]+')[e]{0,1}[s]{0,1}$|^('+otherAbbr[i]+')[s]{0,1}[.]{0,1}$')) {
+         //is other
+         return other[i];
       }
    }
    return -1;
