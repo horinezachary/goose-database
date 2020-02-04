@@ -87,10 +87,76 @@ function getNumber(str) {
          return num;
       }
    }
+   var sp = getVulgarFraction(str)
+   if (sp != false) {
+      return sp;
+   }
    if (isNumber(str)) {
       return parseFloat(str,10);
    } else {
       return false;
+   }
+}
+
+function getVulgarFraction(str) {
+   switch(str) {
+      case "¼":
+         return 1/4;
+         break;
+      case "½":
+         return 1/2;
+         break;
+      case "¾":
+         return 3/4;
+         break;
+      case "⅐":
+         return 1/7;
+         break;
+      case "⅑":
+         return 1/9;
+         break;
+      case "⅒":
+         return 1/10;
+         break;
+      case "⅓":
+         return 1/3;
+         break;
+      case "⅔":
+         return 2/3;
+         break;
+      case "⅕":
+         return 1/5;
+         break;
+      case "⅖":
+         return 2/5;
+         break;
+      case "⅗":
+         return 3/5;
+         break;
+      case "⅘":
+         return 4/5;
+         break;
+      case "⅙":
+         return 1/6;
+         break;
+      case "⅚":
+         return 5/6;
+         break;
+      case "⅛":
+         return 1/8;
+         break;
+      case "⅜":
+         return 3/8;
+         break;
+      case "⅝":
+         return 5/8;
+         break;
+      case "⅞":
+         return 7/8;
+         break;
+      default:
+         return false;
+         break;
    }
 }
 
