@@ -233,3 +233,8 @@ function checkCombined(str1, str2) {
    }
    return [num,measurement];
 }
+module.exports = {
+   parse: function(string) {
+      return parseIngredient(string);
+   }
+};
