@@ -30,7 +30,10 @@ function parseIngredient(string) {
       consumed++;
    }
    else {
-      var ret = checkCombined(arr[0], arr[1]);
+      var ret;
+      if (arr.length > 1) {
+         ret = checkCombined(arr[0], arr[1]);
+      } else {ret = false;}
       if (ret != false) {
          num = num * ret[0];
          measurement = ret[1];
@@ -41,9 +44,16 @@ function parseIngredient(string) {
       }
 
    }
-   measurement = isMeasurement(arr[1], arr[2]);
+   if (arr.length > 2) {
+      measurement = isMeasurement(arr[1], arr[2]);
+   } else if (arr.length > 1){measurement = isMeasurement(arr[1], "");
+   } else {measurement = -1;}
    if (measurement == -1) {
-      var ret = checkCombined(arr[1], arr[2]);
+      var ret;
+      if (arr.length > 2) {
+         ret = checkCombined(arr[1], arr[2]);
+      } else if (arr.length > 1){ret = checkCombined(arr[1], "");}
+      else {ret = false;}
       if (ret != false) {
          num = num * ret[0];
          measurement = ret[1];
@@ -67,7 +77,7 @@ function parseIngredient(string) {
       //TODO: check for ignored words
       ingredient += " " + origarr[i];
    }
-   return "Parse: " + num + ", " + measurement + ", " + ingredient;
+   return {num,measurement,ingredient};
 }
 
 function isNumber(str) {
