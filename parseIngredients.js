@@ -21,6 +21,8 @@ function parseIngredient(string) {
    var measurement;
    var ingredient = "";
    var consumed = 0;
+   var origsString = string;
+   string = removeParenthesis(string);
    var arr = string.split(" ");
    if (getNumber(arr[0]) != false) {
       num = getNumber(arr[0]);
@@ -123,6 +125,19 @@ function isMeasurement(str1, str2) {
       }
    }
    return -1;
+}
+
+function removeParenthesis(str) {
+   var innerbits = {};
+   while (str.match(/\([^\(\)]*\)/) !== null) {
+      var reg = str.match(/\([^\(\)]*\)/);
+      for (i = 0; i < reg.length; i++) {
+         innerbits+=(reg[i]);
+         str = str.replace(reg[i],reg[i].substring(1,reg[i].length-1));
+      }
+   }
+   //return {str,innerbits};
+   return str;
 }
 
 function checkCombined(str1, str2) {
