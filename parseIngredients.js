@@ -145,8 +145,10 @@ function checkCombined(str1, str2) {
       return false;
    }
    //var split = str1.split(str1.indexOf(str1.match(/[a-z]/)));
-   var split1 = str1.slice(0,str1.indexOf(str1.match(/[a-z]/)));
-   var split2 = str1.slice(str1.indexOf(str1.match(/[a-z]/)));
+   var split1 = str1.slice(0,str1.indexOf(str1.match(/[\-a-z]/)));
+   var split2 = str1.slice(str1.indexOf(str1.match(/[\-a-z]/)));
+   console.log("s1: " + split1);
+   console.log("s2: " + split2);
    var num = getNumber(split1);
    if (num == false) {
       return false;
@@ -155,7 +157,9 @@ function checkCombined(str1, str2) {
    if (measurement == -1) {
       var ret = checkCombined(split2.slice(1), "");
       if (ret != false) {
-         num = num * ret[0];
+         if (!Number.isNaN(ret[0])) {
+            num = num * getNumber(ret[0]);
+         }
          measurement = ret[1];
       }
       else {
