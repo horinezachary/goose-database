@@ -62,9 +62,10 @@ function parseIngredient(string) {
          consumed++;
       }
    }
+   var origarr = origsString.split(" ");
    for (i = consumed; i < arr.length; i++) {
       //TODO: check for ignored words
-      ingredient += " " + arr[i];
+      ingredient += " " + origarr[i];
    }
    return "Parse: " + num + ", " + measurement + ", " + ingredient;
 }
