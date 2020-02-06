@@ -73,12 +73,13 @@ function parseIngredient(string) {
       }
    }
    var origarr = origsString.split(" ");
+   var text = "";
    for (i = consumed; i < arr.length; i++) {
       //TODO: check for ignored words
-      ingredient += " " + origarr[i];
+      text += " " + origarr[i];
    }
-   ingredient = ingredient.trim();
-   return {"size":num,"measurement":measurement,"text":ingredient};
+   text = text.trim();
+   return {"size":num,"measurement":measurement,"text":text};
 }
 
 function isNumber(str) {
