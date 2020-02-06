@@ -83,7 +83,7 @@ function parseIngredient(string) {
 }
 
 function isNumber(str) {
-   if (str == str.match(/^[0-9.\/]*$/g)) {
+   if (str == toString(str).match(/^[0-9.\/]*$/g)) {
       return true;
    }
    else {
@@ -92,7 +92,7 @@ function isNumber(str) {
 }
 
 function getNumber(str) {
-   if (str.includes("/")) {
+   if (toString(str).includes("/")) {
       //fraction
       var arr = str.split("/");
       if (getNumber(arr[0]) && getNumber(arr[1])){
@@ -124,13 +124,11 @@ function getVulgarFraction(str) {
             containsVul = true;
             runningTotal += runningNumber;
             runningNumber = 0;
-            console.log(vul);
          }else {
             var char = getNumber(str[i]);
             if (char != false) {
                runningNumber = runningNumber*10 + char;
             }
-            console.log(char);
          }
       }
       runningTotal += runningNumber;

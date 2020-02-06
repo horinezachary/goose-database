@@ -43,7 +43,7 @@ function getIngredients(recipe) {
    var ret = [];
    var ingredients = Object.values(recipe.ingredients);
    for (r = 0; r < ingredients.length; r++) {
-      ret.push("ingredients":ingredient.parse(ingredients[r]));
+      ret.push(ingredient.parse(ingredients[r]));
    }
    return ret;
 }
