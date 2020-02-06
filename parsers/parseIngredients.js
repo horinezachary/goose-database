@@ -33,10 +33,17 @@ function parseIngredient(string) {
       var ret;
       if (arr.length > 1) {
          ret = checkCombined(arr[0], arr[1]);
+      } else if (arr.length = 1) {
+         ret = checkCombined(arr[0], "");
       } else {ret = false;}
       if (ret != false) {
          num = num * ret[0];
-         measurement = ret[1];
+         if (ret.length == 3) {
+            measurement = ret[2];
+            consumed--;
+         } else {
+            measurement = ret[1];
+         }
          consumed++;
          if(ret[1] == volume[4]) {
             consumed++;
@@ -56,7 +63,12 @@ function parseIngredient(string) {
       else {ret = false;}
       if (ret != false) {
          num = num * ret[0];
-         measurement = ret[1];
+         if (ret.length == 3) {
+            measurement = ret[2];
+            consumed--;
+         } else {
+            measurement = ret[1];
+         }
          consumed++;
          if(ret[1] == volume[4]) {
             consumed++;
@@ -271,7 +283,7 @@ function checkCombined(str1, str2) {
    measurement = isMeasurement(split2, str2);
    if (measurement == -1) {
       var ret = checkCombined(split2.slice(1), "");
-      if (ret != false) {
+      if (ret != false || ret.length == 3) {
          if (!Number.isNaN(ret[0])) {
             num = num * getNumber(ret[0]);
          }
@@ -279,6 +291,8 @@ function checkCombined(str1, str2) {
       }
       else if (num == false && measurement == -1) {
          return false;
+      } else {
+         return [num,measurement,ret[1]];
       }
    }
    return [num,measurement];
