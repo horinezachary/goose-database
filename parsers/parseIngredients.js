@@ -100,7 +100,7 @@ function getNumber(str) {
          return num;
       }
    }
-   var sp = getVulgarFraction(str)
+   var sp = getVulgarFraction(str);
    if (sp != false) {
       return sp;
    }
@@ -112,6 +112,43 @@ function getNumber(str) {
 }
 
 function getVulgarFraction(str) {
+   containsVul = false;
+   var runningTotal = 0;
+   var runningNumber = 0;
+   var lastNumber = true;
+   if (str.length > 1) {
+      for (i = 0; i < str.length; i++) {
+         var vul = vulgarFraction(str[i]);
+         if (vul != false) {
+            runningTotal += vul;
+            containsVul = true;
+            runningTotal += runningNumber;
+            runningNumber = 0;
+            console.log(vul);
+         }else {
+            var char = getNumber(str[i]);
+            if (char != false) {
+               runningNumber = runningNumber*10 + char;
+            }
+            console.log(char);
+         }
+      }
+      runningTotal += runningNumber;
+   } else {
+      var vul = vulgarFraction(str);
+      if (vul != false) {
+         runningTotal += vul;
+         containsVul = true;
+      }
+   }
+   if (containsVul) {
+      return runningTotal;
+   } else {
+      return false;
+   }
+}
+
+function vulgarFraction(str) {
    switch(str) {
       case "¼":
          return 1/4;
@@ -242,7 +279,7 @@ function checkCombined(str1, str2) {
          }
          measurement = ret[1];
       }
-      else {
+      else if (num == false && measurement == -1) {
          return false;
       }
    }
