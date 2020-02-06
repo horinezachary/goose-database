@@ -1,11 +1,11 @@
-const weight = ["pound","ounce"];
-const weightAbbr = ["lb", "oz"];
+const weight = ["pound","ounce","gram","kilogram","milligram"];
+const weightAbbr = ["lb", "oz","g","kg","mg"];
 const volume = ["gallon", "quart", "pint", "cup", "fluid ounce", "tablespoon", "teaspoon", "milliliter", "liter"];
 const volumeAbbr = ["gal","qt","pt","cp","floz","tbsp","tsp","ml","l"];
 const length = ["inch","centimeter"];
 const lengthAbbr = ["in", "cm"];
-const other = ["piece"];
-const otherAbbr = ["pc"];
+const other = ["piece","pinch"];
+const otherAbbr = ["pc","pinch"];
 const defaultmeasurement = "unit";
 
 /*
