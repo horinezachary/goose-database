@@ -77,7 +77,8 @@ function parseIngredient(string) {
       //TODO: check for ignored words
       ingredient += " " + origarr[i];
    }
-   return {num,measurement,ingredient};
+   ingredient = ingredient.trim();
+   return {"size":num,"measurement":measurement,"text":ingredient};
 }
 
 function isNumber(str) {
@@ -172,6 +173,8 @@ function getVulgarFraction(str) {
 }
 
 function isMeasurement(str1, str2) {
+   str1 = str1.toLowerCase();
+   str2 = str2.toLowerCase();
    if (str1.match(/^(fluid)$|^(fl)[.]?$/)) {
       if (str2.match(/^(ounce)[s]?$|^(oz)[.]?$/)) {
          //fluid oz
