@@ -1,4 +1,5 @@
 var ingredient = require('./parseIngredients.js');
+var format = require('./formatter.js');
 
 var jsonIn = require('./jsonOut.json');
 
@@ -20,46 +21,12 @@ for (q = 0; q < jsonIn.length; q++) {
    totalEntries+=entries;
 }
 
-console.log(boxFormat("File: "+"jsonOut.json"+"\n"+
-                      "Total Recipes: "+Object.values(jsonIn).length+"\n"+
-                      "Total Entries: "+totalEntries+"\n"+
-                      "Average per Recipe: "+totalEntries/Object.values(jsonIn).length));
 
-function boxFormat(str) {
-   var strs = str.split("\n");
-   var longestLength = 0;
-   for (i = 0; i < strs.length; i++) {
-      if (strs[i].length > longestLength) {
-         longestLength = strs[i].length;
-      }
-   }
-   var longestLabel = 0;
-   for (i = 0; i < strs.length; i++) {
-      if (strs[i].split(": ")[0].length > longestLabel) {
-         longestLabel = strs[i].split(": ")[0].length+2;
-      }
-   }
-   var data = "";
-   for (i = 0; i < strs.length; i++) {
-      var first = strs[i].split(": ")[0]+": ";
-      var second = strs[i].split(": ")[1];
-      var spc = "";
-      for (j = 0; j < longestLabel-(first.length); j++) {
-         spc+=" ";
-      }
-      var label = spc+first;
-      spc = ""
-      for (j = 0; j < longestLength-(label.length+second.length); j++) {
-         spc+=" ";
-      }
-      data+=("│"+label+second+spc+"│\n");
-   }
-   var dashstr = "";
-   for (i = 0; i < longestLength; i++) {
-      dashstr+="─";
-   }
-   return ("┌"+dashstr+"┐\n"+data+"└"+dashstr+"┘");
-}
+console.log(format.box("File In: "+"jsonOut.json"+"\n"+
+                       "File Out: "+"parsed.json"+"\n"+
+                       "Total Recipes: "+Object.values(jsonIn).length+"\n"+
+                       "Total Entries: "+totalEntries+"\n"+
+                       "Average per Recipe: "+totalEntries/Object.values(jsonIn).length));
 
 function getRecipeData(recipe) {
    var ret = [];
