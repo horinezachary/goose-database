@@ -67,6 +67,15 @@ function parseIngredient(string) {
       }
    }
    for (var i = 0; i < arr.length; i++) {
+      if (i < arr.length-1){
+         if (wordArray[i] == NUM && wordArray[i+1] == NUM) {
+            arr.splice(i,2,parseFloat(arr[i])+parseFloat(arr[i+1]));
+            wordArray.splice(i,1);
+         }
+      }
+   }
+
+   for (var i = 0; i < arr.length; i++) {
       if (i > 0 && i < arr.length-1){
          //at least one value on either side
          if (wordArray[i] == DASH) {
