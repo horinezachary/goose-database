@@ -227,7 +227,43 @@ function vulgarFraction(str) {
    }
 }
 
-function isMeasurement(str1, str2) {
+function isMeasurement(str1) {
+   //TODO: Simplify this
+   str1 = str1.toLowerCase();
+   if (str1.match(/^(fluid)$|^(fl)[.]?$/)) {
+      return volume[4];
+   }
+   if (str1.match(/^(ounce)[s]?$|^(oz)[.]?$/)) {
+      return volume[4];
+   }
+   for (var i = 0; i < volume.length; i++) {
+      if (str1.match('^('+volume[i]+')[s]?$|^('+volumeAbbr[i]+')[s]?[.]?$')) {
+         //is volume
+         return volume[i];
+      }
+   }
+   for (var i = 0; i < weight.length; i++) {
+      if (str1.match('^('+weight[i]+')[s]?$|^('+weightAbbr[i]+')[s]?[.]?$')) {
+         //is weight
+         return weight[i];
+      }
+   }
+   for (var i = 0; i < length.length; i++) {
+      if (str1.match('^('+length[i]+')[e]?[s]?$|^('+lengthAbbr[i]+')[s]?[.]?$')) {
+         //is length
+         return length[i];
+      }
+   }
+   for (var i = 0; i < other.length; i++) {
+      if (str1.match('^('+other[i]+')[e]?[s]?$|^('+otherAbbr[i]+')[s]?[.]?$')) {
+         //is other
+         return other[i];
+      }
+   }
+   return -1;
+}
+
+function getMeasurement(str1, str2) {
    str1 = str1.toLowerCase();
    str2 = str2.toLowerCase();
    if (str1.match(/^(fluid)$|^(fl)[.]?$/)) {
@@ -261,6 +297,47 @@ function isMeasurement(str1, str2) {
       }
    }
    return -1;
+}
+
+function isIngredient(str) {
+   //TODO: finish this
+   return false;
+}
+
+function isVerb(str) {
+   for (var i = 0; i < verbs.length; i++) {
+      if (str == verbs[i]) {
+         return verb[i];
+      }
+   }
+   return false;
+}
+
+function isAdverb(str) {
+   for (var i = 0; i < adverbs.length; i++) {
+      if (str == adverbs[i]) {
+         return adverbs[i];
+      }
+   }
+   return false;
+}
+
+function isConnectorWord(str) {
+   for (var i = 0; i < connectors.length; i++) {
+      if (str == connectors[i]) {
+         return connectors[i];
+      }
+   }
+   return false;
+}
+
+function isGarbage(str) {
+   for (var i = 0; i < ignored.length; i++) {
+      if (str == ignored[i]) {
+         return ignored[i];
+      }
+   }
+   return false;
 }
 
 function spacePunctuation(str) {
