@@ -17,6 +17,7 @@ connectors = words.connectors;
 ignored = words.ignored;
 
 const NUM         = "N";
+const NUM_RANGE   = "R";
 const MEASUREMENT = "M";
 const INGREDIENT  = "I";
 const VERB        = "V";
@@ -65,14 +66,21 @@ function parseIngredient(string) {
          wordArray.push(c);
       }
    }
-
    for (var i = 0; i < arr.length; i++) {
       if (i > 0 && i < arr.length-1){
          //at least one value on either side
-         if (wordArray[i] == DASH && isWord(arr[i-1]) && isWord(arr[i+1])) {
-            if (wordArray[i-1] == ADJECTIVE && wordArray[i+1] == UNKNOWN) {
+         if (wordArray[i] == DASH) {
+            //hyphenated word
+            if(isWord(arr[i-1]) && isWord(arr[i+1])) {
+               if (wordArray[i-1] == ADJECTIVE && wordArray[i+1] == UNKNOWN) {
+                  arr.splice(i-1,3,arr[i-1]+"-"+arr[i+1]);
+                  wordArray.splice(i,2);
+               }
+            }
+            //range of values
+            if (wordArray[i-1] == NUM && wordArray[i+1] == NUM) {
                arr.splice(i-1,3,arr[i-1]+"-"+arr[i+1]);
-               wordArray.splice(i,2);
+               wordArray.splice(i-1,3,NUM_RANGE);
             }
          }
       }
