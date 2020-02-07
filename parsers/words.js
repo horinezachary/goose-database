@@ -11,6 +11,9 @@ var adverb = [
    "thinly",
    "crosswise",
 ];
+var adjective = [
+   "good"
+]
 var ignored = [
    "about",
    "that",
@@ -25,6 +28,7 @@ var connectors = [
 module.exports = {
    verbs: verb,
    adverbs: adverb,
+   adjectives: adjective,
    ignored: ignored,
    connectors: connectors
 };

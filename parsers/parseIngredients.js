@@ -12,6 +12,7 @@ const defmeasure  = measurement.defaultmeasurement;
 const words = require('./words.js');
 verbs = words.verbs;
 adverbs = words.adverbs;
+adjectives = words.adjectives;
 connectors = words.connectors;
 ignored = words.ignored;
 
@@ -20,6 +21,7 @@ const MEASUREMENT = "M";
 const INGREDIENT  = "I";
 const VERB        = "V";
 const ADVERB      = "A";
+const ADJECTIVE   = "D";
 const CONNECTOR   = "J";
 const GARBAGE     = "G";
 const COMBINED    = "C";
@@ -83,6 +85,9 @@ function parseWord(str) {
    }
    if (isAdverb(str) != false) {
       return ADVERB;
+   }
+   if (isAdjective(str) != false) {
+      return ADJECTIVE;
    }
    if (isConnectorWord(str) != false) {
       return CONNECTOR;
@@ -333,6 +338,15 @@ function isAdverb(str) {
    for (var i = 0; i < adverbs.length; i++) {
       if (str == adverbs[i]) {
          return adverbs[i];
+      }
+   }
+   return false;
+}
+
+function isAdjective(str) {
+   for (var i = 0; i < adjectives.length; i++) {
+      if (str == adjectives[i]) {
+         return adjectives[i];
       }
    }
    return false;
