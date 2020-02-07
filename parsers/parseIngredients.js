@@ -94,7 +94,7 @@ function parseWord(str) {
 }
 
 function isNumber(str) {
-   if (str == toString(str).match(/^[0-9.\/]*$/g)) {
+   if (str.match(/^[0-9.\/]*$/g) != null) {
       return true;
    }
    else {
@@ -352,7 +352,7 @@ function spacePunctuation(str) {
    while(str.includes("  ")){
       str = str.replace("  "," ");
    }
-   return str;
+   return str.trim();
 }
 
 function checkCombined(str1, str2) {
