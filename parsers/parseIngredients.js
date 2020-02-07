@@ -30,14 +30,6 @@ const END_PAREN   = "PE";
 const COMMA       = "PC";
 const DASH        = "PD";
 
-/*
-console.log(parseIngredient("12 fluid ounces milk"));
-console.log(parseIngredient("1/2 of an ass"));
-console.log(parseIngredient("1 2oz fart"));
-console.log(parseIngredient("3 2oz yogurts"));
-console.log(parseIngredient("1 cup of brandy"));
-*/
-
 console.log(parseIngredient("450ml (about 2 cups) good-quality fish stock"));
 
 function parseIngredient(string) {
@@ -383,6 +375,7 @@ function checkCombined(str1, str2) {
    }
    return [num,measurement];
 }
+
 module.exports = {
    parse: function(string) {
       return parseIngredient(string);
