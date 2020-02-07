@@ -131,9 +131,24 @@ function parseIngredient(string) {
       }
    }
 
+   for (var i = 0; i < arr.length; i++) {
+      if (wordArray[i] == NUM || wordArray[i] == NUM_RANGE) {
+         num+=arr[i];
+      }
+      if (wordArray[i] == MEASUREMENT) {
+         measurement=arr[i];
+      }
+      if (wordArray[i] == INGREDIENT) {
+         ingredient+=" "+arr[i];
+      }
+      if (wordArray[i] == VERB || wordArray[i] == ADVERB || wordArray[i] == ADJECTIVE) {
+         text+=" "+arr[i];
+      }
+   }
+
    console.log(JSON.stringify(arr));
-   return wordArray;
-   //return {"size":num,"measurement":measurement,"ingredient":ingredient,"text":text};
+   //return wordArray;
+   return {"size":num,"measurement":measurement,"ingredient":ingredient,"text":text};
 }
 
 function parseWord(str) {

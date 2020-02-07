@@ -24,7 +24,7 @@ for (q = 0; q < jsonIn.length; q++) {
    totalEntries+=entries;
 }
 
-fs.writeFile("./parsed.json", JSON.stringify(alldata),function(err, result) {if(err) console.log('error', err);});
+fs.writeFile("./output/parsed.json", JSON.stringify(alldata),function(err, result) {if(err) console.log('error', err);});
 
 console.log(format.box("File In: "+"jsonOut.json"+"\n"+
                        "File Out: "+"parsed.json"+"\n"+
