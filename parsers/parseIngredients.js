@@ -43,7 +43,22 @@ function parseIngredient(string) {
    var arr = string.split(' ');
 
    for (var i = 0; i < arr.length; i++) {
-      wordArray.push(parseWord(arr[i]));
+      var c = parseWord(arr[i])
+      if (c == UNKNOWN) {
+         var ret = checkCombined(arr[i]);
+         if (ret != false) {
+            arr.splice(i,1);
+            for (var j = 0; j < ret.length; j++) {
+               arr.splice(i+j,0,ret[j]);
+               wordArray.push(parseWord(ret[j]));
+            }
+            i+=ret.length-1;
+         } else {
+            wordArray.push(c);
+         }
+      } else {
+         wordArray.push(c);
+      }
    }
    console.log(string);
    return wordArray;
@@ -363,6 +378,8 @@ function checkCombined(str) {
          var ret = checkCombined(split2.slice(1));
          if (ret != false) {
             return [split1,ret];
+         } else {
+            return split1;
          }
       }
    } else {
