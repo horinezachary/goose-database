@@ -43,7 +43,8 @@ function parseIngredient(string) {
    var arr = string.split(' ');
 
    for (var i = 0; i < arr.length; i++) {
-      var c = parseWord(arr[i])
+      var c = parseWord(arr[i]);
+      //check for combined words
       if (c == UNKNOWN) {
          var ret = checkCombined(arr[i]);
          if (ret != false) {
@@ -54,13 +55,15 @@ function parseIngredient(string) {
             }
             i+=ret.length-1;
          } else {
+            //check returned false, no real words
             wordArray.push(c);
          }
       } else {
+         //already defined
          wordArray.push(c);
       }
    }
-   console.log(string);
+   console.log(JSON.stringify(arr));
    return wordArray;
    //return {"size":num,"measurement":measurement,"ingredient":ingredient,"text":text};
 }
@@ -102,7 +105,17 @@ function parseWord(str) {
    return UNKNOWN;
 
 }
+//made up of all letters
+function isWord(str) {
+   if (str.match(/^[a-zA-Z.-]*$/g) != null) {
+      return true;
+   }
+   else {
+      return false;
+   }
+}
 
+//numbers or decimal
 function isNumber(str) {
    if (str.match(/^[0-9.\/]*$/g) != null) {
       return true;
@@ -112,6 +125,7 @@ function isNumber(str) {
    }
 }
 
+//returns float, takes in fraction, vulgar, int or float
 function getNumber(str) {
    if (toString(str).includes("/")) {
       //fraction
@@ -309,7 +323,7 @@ function isIngredient(str) {
 function isVerb(str) {
    for (var i = 0; i < verbs.length; i++) {
       if (str == verbs[i]) {
-         return verb[i];
+         return verbs[i];
       }
    }
    return false;
