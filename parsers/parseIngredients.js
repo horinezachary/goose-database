@@ -85,6 +85,42 @@ function parseIngredient(string) {
          }
       }
    }
+   var openParen = [];
+   for (var i = 0; i < arr.length; i++) {
+      if(wordArray[i] == START_PAREN) {
+         openParen.push(i)
+      }
+      if (wordArray[i] == END_PAREN) {
+         var open = openParen.shift();
+         var run = "";
+         for(var j = open; j < i; j++) {
+            run+=wordArray[j];
+         }
+         if (run.includes('GNM') || run.includes('GRM')) {
+            //about x amt, most likely an equivalency.
+            if (wordArray.join().match("N").length > 0 || wordArray.join().match("R") > 0) {
+               //there are more than one number values,
+               //it is pretty safe to remove this one.
+               var idx;
+               if (run.includes('GNM')) {
+                  idx = run.indexOf("GNM")+1;
+               } else {
+                  idx = run.indexOf("GRM")+1;
+               }
+               arr.splice(idx,3);
+               wordArray.splice(idx,3);
+            }
+         }
+      }
+   }
+   for (var i = 0; i < arr.length; i++) {
+      if (i < arr.length-1){
+         if (wordArray[i] == START_PAREN && wordArray[i+1] == END_PAREN) {
+            arr.splice(i,2);
+            wordArray.splice(i,2);
+         }
+      }
+   }
 
    console.log(JSON.stringify(arr));
    return wordArray;
