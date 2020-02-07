@@ -38,6 +38,7 @@ console.log(parseIngredient("3 2oz yogurts"));
 console.log(parseIngredient("1 cup of brandy"));
 */
 
+console.log(parseIngredient("450ml (about 2 cups) good-quality fish stock"));
 
 function parseIngredient(string) {
    var num = 1;
