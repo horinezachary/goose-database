@@ -67,12 +67,9 @@ function parseIngredient(string) {
    }
 
    for (var i = 0; i < arr.length; i++) {
-      console.log(arr[i]);
       if (i > 0 && i < arr.length-1){
-         console.log("In Range");
          //at least one value on either side
          if (wordArray[i] == DASH && isWord(arr[i-1]) && isWord(arr[i+1])) {
-            console.log("DASH");
             if (wordArray[i-1] == ADJECTIVE && wordArray[i+1] == UNKNOWN) {
                arr.splice(i-1,3,arr[i-1]+"-"+arr[i+1]);
                wordArray.splice(i,2);
