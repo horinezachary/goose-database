@@ -129,7 +129,7 @@ function getVulgarFraction(str) {
    var runningNumber = 0;
    var lastNumber = true;
    if (str.length > 1) {
-      for (i = 0; i < str.length; i++) {
+      for (var i = 0; i < str.length; i++) {
          var vul = vulgarFraction(str[i]);
          if (vul != false) {
             runningTotal += vul;
@@ -229,25 +229,25 @@ function isMeasurement(str1, str2) {
          return volume[4];
       } else return -1;
    }
-   for (i = 0; i < volume.length; i++) {
+   for (var i = 0; i < volume.length; i++) {
       if (str1.match('^('+volume[i]+')[s]?$|^('+volumeAbbr[i]+')[s]?[.]?$')) {
          //is volume
          return volume[i];
       }
    }
-   for (i = 0; i < weight.length; i++) {
+   for (var i = 0; i < weight.length; i++) {
       if (str1.match('^('+weight[i]+')[s]?$|^('+weightAbbr[i]+')[s]?[.]?$')) {
          //is weight
          return weight[i];
       }
    }
-   for (i = 0; i < length.length; i++) {
+   for (var i = 0; i < length.length; i++) {
       if (str1.match('^('+length[i]+')[e]?[s]?$|^('+lengthAbbr[i]+')[s]?[.]?$')) {
          //is length
          return length[i];
       }
    }
-   for (i = 0; i < other.length; i++) {
+   for (var i = 0; i < other.length; i++) {
       if (str1.match('^('+other[i]+')[e]?[s]?$|^('+otherAbbr[i]+')[s]?[.]?$')) {
          //is other
          return other[i];
