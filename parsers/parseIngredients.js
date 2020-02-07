@@ -15,6 +15,21 @@ adverbs = words.adverbs;
 connectors = words.connectors;
 ignored = words.ignored;
 
+const NUM         = "N";
+const MEASUREMENT = "M";
+const INGREDIENT  = "I";
+const VERB        = "V";
+const ADVERB      = "A";
+const CONNECTOR   = "J";
+const GARBAGE     = "G";
+const COMBINED    = "C";
+const UNKNOWN     = "U";
+
+const START_PAREN = "PS";
+const END_PAREN   = "PE";
+const COMMA       = "PC";
+const DASH        = "PD";
+
 /*
 console.log(parseIngredient("12 fluid ounces milk"));
 console.log(parseIngredient("1/2 of an ass"));
@@ -28,77 +43,53 @@ function parseIngredient(string) {
    var num = 1;
    var measurement;
    var ingredient = "";
-   var consumed = 0;
-   var origsString = string;
-   string = removeParenthesis(string);
-   var arr = string.split(" ");
-   if (getNumber(arr[0]) != false) {
-      num = getNumber(arr[0]);
-      consumed++;
-   }
-   else {
-      var ret;
-      if (arr.length > 1) {
-         ret = checkCombined(arr[0], arr[1]);
-      } else if (arr.length = 1) {
-         ret = checkCombined(arr[0], "");
-      } else {ret = false;}
-      if (ret != false) {
-         num = num * ret[0];
-         if (ret.length == 3) {
-            measurement = ret[2];
-            consumed--;
-         } else {
-            measurement = ret[1];
-         }
-         consumed++;
-         if(ret[1] == volume[4]) {
-            consumed++;
-         }
-      }
+   var text = ""
 
+   var wordArray = [];
+   var string = spacePunctuation(string);
+   var arr = string.split(' ');
+
+   for (var i = 0; i < arr.length; i++) {
+      wordArray.push(parseWord(arr[i]));
    }
-   if (arr.length > 2) {
-      measurement = isMeasurement(arr[1], arr[2]);
-   } else if (arr.length > 1){measurement = isMeasurement(arr[1], "");
-   } else {measurement = -1;}
-   if (measurement == -1) {
-      var ret;
-      if (arr.length > 2) {
-         ret = checkCombined(arr[1], arr[2]);
-      } else if (arr.length > 1){ret = checkCombined(arr[1], "");}
-      else {ret = false;}
-      if (ret != false) {
-         num = num * ret[0];
-         if (ret.length == 3) {
-            measurement = ret[2];
-            consumed--;
-         } else {
-            measurement = ret[1];
-         }
-         consumed++;
-         if(ret[1] == volume[4]) {
-            consumed++;
-         }
-      }
-      else {
-         measurement = defaultmeasurement;
-      }
+   console.log(string);
+   return wordArray;
+   //return {"size":num,"measurement":measurement,"ingredient":ingredient,"text":text};
+}
+
+function parseWord(str) {
+   if (getNumber(str) != false) {
+      return NUM;
    }
-   else {
-      consumed++;
-      if(measurement == volume[4]) {
-         consumed++;
-      }
+   if (isMeasurement(str) != -1) {
+      return MEASUREMENT;
    }
-   var origarr = origsString.split(" ");
-   var text = "";
-   for (i = consumed; i < arr.length; i++) {
-      //TODO: check for ignored words
-      text += " " + origarr[i];
+   if (isIngredient(str) != false) {
+      return INGREDIENT;
    }
-   text = text.trim();
-   return {"size":num,"measurement":measurement,"text":text};
+   if (isVerb(str) != false) {
+      return VERB;
+   }
+   if (isAdverb(str) != false) {
+      return ADVERB;
+   }
+   if (isConnectorWord(str) != false) {
+      return CONNECTOR;
+   }
+   if (isGarbage(str) != false) {
+      return GARBAGE;
+   }
+   if (str == "(") {
+      return START_PAREN;
+   }
+   if (str == ")") {
+      return END_PAREN;
+   }
+   if (str == ",") {
+      return COMMA;
+   }
+   return UNKNOWN;
+
 }
 
 function isNumber(str) {
