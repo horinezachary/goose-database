@@ -263,16 +263,21 @@ function isMeasurement(str1, str2) {
    return -1;
 }
 
-function spaceParenthesis(str) {
+function spacePunctuation(str) {
    //convert to other ascii char
-   while(str.includes("(")||str.includes(")")){
+   while(str.includes("(")||str.includes(")")||str.includes(",")||str.includes("-")){
       str = str.replace("(","▌");
       str = str.replace(")","▐");
+      str = str.replace(",","▄");
+      str = str.replace("-","▀");
+
    }
    //convert back with spaces
    while(str.includes("▌")||str.includes("▐")){
       str = str.replace("▌"," ( ");
       str = str.replace("▐"," ) ");
+      str = str.replace("▄"," , ");
+      str = str.replace("▀"," - ");
    }
    //remove double spaces
    while(str.includes("  ")){
