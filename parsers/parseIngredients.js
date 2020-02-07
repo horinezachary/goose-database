@@ -1,12 +1,19 @@
-const weight = ["pound","ounce","gram","kilogram","milligram"];
-const weightAbbr = ["lb", "oz","g","kg","mg"];
-const volume = ["gallon", "quart", "pint", "cup", "fluid ounce", "tablespoon", "teaspoon", "milliliter", "liter"];
-const volumeAbbr = ["gal","qt","pt","cp","floz","tbsp","tsp","ml","l"];
-const length = ["inch","centimeter"];
-const lengthAbbr = ["in", "cm"];
-const other = ["piece","pinch"];
-const otherAbbr = ["pc","pinch"];
-const defaultmeasurement = "unit";
+const measurement = require('./measurements.js');
+const weight      = measurement.weight;
+const weightAbbr  = measurement.weightAbbr;
+const volume      = measurement.volume;
+const volumeAbbr  = measurement.volumeAbbr;
+const length      = measurement.length;
+const lengthAbbr  = measurement.lengthAbbr;
+const other       = measurement.other;
+const otherAbbr   = measurement.otherAbbr;
+const defmeasure  = measurement.defaultmeasurement;
+
+const words = require('./words.js');
+verbs = words.verbs;
+adverbs = words.adverbs;
+connectors = words.connectors;
+ignored = words.ignored;
 
 /*
 console.log(parseIngredient("12 fluid ounces milk"));
