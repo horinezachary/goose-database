@@ -256,16 +256,21 @@ function isMeasurement(str1, str2) {
    return -1;
 }
 
-function removeParenthesis(str) {
-   var innerbits = {};
-   while (str.match(/\([^\(\)]*\)/) !== null) {
-      var reg = str.match(/\([^\(\)]*\)/);
-      for (i = 0; i < reg.length; i++) {
-         innerbits+=(reg[i]);
-         str = str.replace(reg[i],reg[i].substring(1,reg[i].length-1));
-      }
+function spaceParenthesis(str) {
+   //convert to other ascii char
+   while(str.includes("(")||str.includes(")")){
+      str = str.replace("(","▌");
+      str = str.replace(")","▐");
    }
-   //return {str,innerbits};
+   //convert back with spaces
+   while(str.includes("▌")||str.includes("▐")){
+      str = str.replace("▌"," ( ");
+      str = str.replace("▐"," ) ");
+   }
+   //remove double spaces
+   while(str.includes("  ")){
+      str = str.replace("  "," ");
+   }
    return str;
 }
 
