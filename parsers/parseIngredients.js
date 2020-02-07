@@ -211,35 +211,35 @@ function vulgarFraction(str) {
    }
 }
 
-function isMeasurement(str1) {
+function isMeasurement(str) {
    //TODO: Simplify this
-   str1 = str1.toLowerCase();
-   if (str1.match(/^(fluid)$|^(fl)[.]?$/)) {
+   str = str.toLowerCase();
+   if (str.match(/^(fluid)$|^(fl)[.]?$/)) {
       return volume[4];
    }
-   if (str1.match(/^(ounce)[s]?$|^(oz)[.]?$/)) {
+   if (str.match(/^(ounce)[s]?$|^(oz)[.]?$/)) {
       return volume[4];
    }
    for (var i = 0; i < volume.length; i++) {
-      if (str1.match('^('+volume[i]+')[s]?$|^('+volumeAbbr[i]+')[s]?[.]?$')) {
+      if (str.match('^('+volume[i]+')[s]?$|^('+volumeAbbr[i]+')[s]?[.]?$')) {
          //is volume
          return volume[i];
       }
    }
    for (var i = 0; i < weight.length; i++) {
-      if (str1.match('^('+weight[i]+')[s]?$|^('+weightAbbr[i]+')[s]?[.]?$')) {
+      if (str.match('^('+weight[i]+')[s]?$|^('+weightAbbr[i]+')[s]?[.]?$')) {
          //is weight
          return weight[i];
       }
    }
    for (var i = 0; i < length.length; i++) {
-      if (str1.match('^('+length[i]+')[e]?[s]?$|^('+lengthAbbr[i]+')[s]?[.]?$')) {
+      if (str.match('^('+length[i]+')[e]?[s]?$|^('+lengthAbbr[i]+')[s]?[.]?$')) {
          //is length
          return length[i];
       }
    }
    for (var i = 0; i < other.length; i++) {
-      if (str1.match('^('+other[i]+')[e]?[s]?$|^('+otherAbbr[i]+')[s]?[.]?$')) {
+      if (str.match('^('+other[i]+')[e]?[s]?$|^('+otherAbbr[i]+')[s]?[.]?$')) {
          //is other
          return other[i];
       }
@@ -347,33 +347,27 @@ function spacePunctuation(str) {
    return str.trim();
 }
 
-function checkCombined(str1, str2) {
-   if (str1.length == 0) {
+function checkCombined(str) {
+   if (str.length == 0) {
       return false;
    }
-   //var split = str1.split(str1.indexOf(str1.match(/[a-z]/)));
-   var split1 = str1.slice(0,str1.indexOf(str1.match(/[\-a-z]/)));
-   var split2 = str1.slice(str1.indexOf(str1.match(/[\-a-z]/)));
-   var num = getNumber(split1);
-   if (num == false) {
-      return false;
-   }
-   measurement = isMeasurement(split2, str2);
-   if (measurement == -1) {
-      var ret = checkCombined(split2.slice(1), "");
-      if (ret != false || ret.length == 3) {
-         if (!Number.isNaN(ret[0])) {
-            num = num * getNumber(ret[0]);
-         }
-         measurement = ret[1];
-      }
-      else if (num == false && measurement == -1) {
-         return false;
+   //var split = str.split(str.indexOf(str.match(/[a-z]/)));
+   var split1 = str.slice(0,str.indexOf(str.match(/[A-Za-z]/)));
+   var split2 = str.slice(str.indexOf(str.match(/[A-Za-z]/)));
+   var s1 = parseWord(split1);
+   var s2 = parseWord(split2);
+   if (s1 != UNKNOWN) {
+      if (s2 != UNKNOWN) {
+         return [split1,split2];
       } else {
-         return [num,measurement,ret[1]];
+         var ret = checkCombined(split2.slice(1));
+         if (ret != false) {
+            return [split1,ret];
+         }
       }
+   } else {
+      return false;
    }
-   return [num,measurement];
 }
 
 module.exports = {
