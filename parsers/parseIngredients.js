@@ -96,6 +96,9 @@ function parseWord(str) {
    if (str == ",") {
       return COMMA;
    }
+   if (str == "-") {
+      return DASH;
+   }
    return UNKNOWN;
 
 }
