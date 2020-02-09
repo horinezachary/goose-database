@@ -1,14 +1,9 @@
+var mysql = require('mysql');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
+var con = require('./sqlConfig');
 
-var mysql = require('mysql');
-
-var con = mysql.createConnection(config.database);
-
-con.connect(function(err) {
-   if (err) throw err;
-   console.log("Connected to mysql!");
-});
+con.start(config.database);
 
 var path = require('path');
 var express = require('express');
