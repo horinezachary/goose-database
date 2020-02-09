@@ -48,11 +48,32 @@ body{
    margin-left: 1rem;
 }
 
+.recipe-instruction {
+   padding: .25rem 1.25rem;
+   margin: 0rem;
+}
+
+.recipe-ingredient {
+   padding: .25rem 1.25rem;
+   margin: 0rem;
+}
+
+.recipe-instruction p {
+   margin-bottom: 0rem;
+}
+
+.recipe-ingredient p {
+   margin-bottom: 0rem;
+}
+
 .recipe-body li {
    margin-left: 2rem;
    border-width: 0rem;
 }
 
+ul.recipe-body  {
+   margin-bottom: 1rem;
+}
 
 .hidden {
    display: none;
