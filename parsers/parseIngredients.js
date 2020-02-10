@@ -202,6 +202,7 @@ function parseIngredient(string) {
    text = text.trim();
    ingredient = ingredient.trim();
    console.log(JSON.stringify(arr));
+   console.log(wordArray);
    //return wordArray;
    return {"size":num,"measurement":measurement,"variance":variance,"ingredient":ingredient,"text":text};
 }

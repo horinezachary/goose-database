@@ -6,8 +6,11 @@ var verb = [
    "using",
    "trimmed",
    "halved",
+   "drained"
 ];
 var adverb = [
+   "finely",
+
    "thinly",
    "crosswise",
 ];
@@ -16,6 +19,7 @@ var adjective = [
 ]
 var ignored = [
    "about",
+   "~",
    "that",
    "but",
    "optional"
