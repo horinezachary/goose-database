@@ -1,9 +1,10 @@
 var ingredient = require('./parseIngredients.js');
 var format = require('./formatter.js');
 var fs = require('fs');
-
+var foods = require('./generateFoodList');
 var jsonIn = require('./jsonOut.json');
 
+foods.generateFoods();
 
 var totalEntries = 0;
 
