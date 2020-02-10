@@ -210,14 +210,23 @@ function parseIngredient(string) {
 function checkFoods(unknownStrings,arr,wordArray) {
    for (var i = 0; i < unknownStrings.length; i++) {
       var strObj = unknownStrings[i];
-      for (j = 0; j < foods.length; j++) {
-         if (foods[j].name == strObj.string) {
-            arr.splice(strObj.start,strObj.end-strObj.start+1,foods[j].name);
-            wordArray.splice(strObj.start,strObj.end-strObj.start+1,INGREDIENT);
-            return [arr,wordArray];
-         }
+      var food = checkSingleFood(unknownStrings[i]);
+      if (food != false) {
+         arr.splice(strObj.start,strObj.end-strObj.start+1,foods[j]);
+         wordArray.splice(strObj.start,strObj.end-strObj.start+1,INGREDIENT);
+      } else {
+         console.log(arr+"\n"+wordArray+"\n"+"UNKNOWN: "+strObj);
       }
    }
+}
+
+function checkSingleFood(string) {
+   for (j = 0; j < foods.length; j++) {
+      if (foods[j] == strObj.string) {
+         return foods[j];
+      }
+   }
+   return false;
 }
 
 function parseWord(str) {
