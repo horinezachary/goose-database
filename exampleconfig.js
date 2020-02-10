@@ -1,7 +1,7 @@
 var config = {
 development: {
     //url to be used in link generation
-    url: 'https://horine.dev',
+    url: 'https://goose.horine.dev',
     //database connection settings
     database: {
       host: "pma.horine.dev",
