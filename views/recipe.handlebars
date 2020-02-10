@@ -1,0 +1,29 @@
+<div class="card list" style="width:60rem;">
+   <div class="card-body recipe-header">
+         <h1 class="recipe-title">{{recipe.title}}</h1>
+         <h6 class="recipe-author">{{recipe.author}} - {{recipe.date}}</h6>
+         <div class="recipe-info text-center">
+            <h6 class="flex-fill">Prep Time: {{recipe.preptime}}</h6>
+            <h6 class="flex-fill">Cook Time: {{recipe.cooktime}}</h6>
+            <h6 class="flex-fill">Serves: {{recipe.servings}}</h6>
+            <h6 class="flex-fill">Source: <a href="{{recipe.sourceLink}}">{{recipe.source}}</a></h6>
+         </div>
+   </div>
+   <h3 class="section-header">Ingredients</h3>
+   <ul class="list-group list-group-flush recipe-body">
+
+      {{#each ingredient}}
+         <li class="list-group-item recipe-ingredient">
+            <p>{{size}} {{measurement}} {{text}}</p>
+         </li>
+      {{/each}}
+   </ul>
+   <h3 class="section-header">Instructions</h3>
+   <ul class="list-group list-group-flush recipe-body">
+      {{#each instruction}}
+         <li class="list-group-item recipe-instruction">
+            <p>{{step}}. {{text}}</p>
+         </li>
+      {{/each}}
+   </ul>
+</div>
