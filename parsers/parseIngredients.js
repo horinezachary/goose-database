@@ -11,6 +11,7 @@ const defmeasure  = measurement.defaultmeasurement;
 
 const numbers = require('./numbers.json');
 const words = require('./words.js');
+const foods = require('./foods.json');
 verbs = words.verbs;
 adverbs = words.adverbs;
 adjectives = words.adjectives;
@@ -36,12 +37,12 @@ const COMMA       = "PC";
 const DASH        = "PD";
 
 console.log(parseIngredient("450ml (about 2 cups) good-quality fish stock"));
-
 function parseIngredient(string) {
-   var num = 1;
+   var num = "";
+   var variance = 0;
    var measurement;
    var ingredient = "";
-   var text = ""
+   var text = "";
 
    var wordArray = [];
    var string = spacePunctuation(string);
@@ -152,6 +153,28 @@ function parseIngredient(string) {
          }
       }
    }
+   var unknownStrings = [];
+   for (var i = 0; i < arr.length; i++) {
+      if (wordArray[i] == UNKNOWN) {
+         var string = arr[i];
+         var start = i;
+         var end = i;
+         i++;
+         while (wordArray[i] == UNKNOWN && i < arr.length) {
+            string+=" "+arr[i];
+            end = i;
+            i++;
+         }
+         unknownStrings.push({string,start,end});
+      }
+   }
+   console.log(unknownStrings);
+
+   //check against foods list
+   var ret = checkFoods(unknownStrings,arr,wordArray);
+   arr = ret[0];
+   wordArray = ret[1];
+
 
    for (var i = 0; i < arr.length; i++) {
       if (wordArray[i] == NUM || wordArray[i] == NUM_RANGE) {
@@ -168,9 +191,26 @@ function parseIngredient(string) {
       }
    }
 
+   if (num == "") {
+      num = 1;
+   }
+   text = text.trim();
+   ingredient = ingredient.trim();
    console.log(JSON.stringify(arr));
    //return wordArray;
    return {"size":num,"measurement":measurement,"ingredient":ingredient,"text":text};
+
+function checkFoods(unknownStrings,arr,wordArray) {
+   for (var i = 0; i < unknownStrings.length; i++) {
+      var strObj = unknownStrings[i];
+      for (j = 0; j < foods.length; j++) {
+         if (foods[j].name == strObj.string) {
+            arr.splice(strObj.start,strObj.end-strObj.start+1,foods[j].name);
+            wordArray.splice(strObj.start,strObj.end-strObj.start+1,INGREDIENT);
+            return [arr,wordArray];
+         }
+      }
+   }
 }
 
 function parseWord(str) {
@@ -182,9 +222,6 @@ function parseWord(str) {
    }
    if (isMeasurement(str) != -1) {
       return MEASUREMENT;
-   }
-   if (isIngredient(str) != false) {
-      return INGREDIENT;
    }
    if (isVerb(str) != false) {
       return VERB;
@@ -433,11 +470,6 @@ function getMeasurement(str1, str2) {
       }
    }
    return -1;
-}
-
-function isIngredient(str) {
-   //TODO: finish this
-   return false;
 }
 
 function isVerb(str) {
