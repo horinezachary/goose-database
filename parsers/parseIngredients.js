@@ -9,6 +9,7 @@ const other       = measurement.other;
 const otherAbbr   = measurement.otherAbbr;
 const defmeasure  = measurement.defaultmeasurement;
 
+const numbers = require('./numbers.json');
 const words = require('./words.js');
 verbs = words.verbs;
 adverbs = words.adverbs;
@@ -18,6 +19,7 @@ ignored = words.ignored;
 
 const NUM         = "N";
 const NUM_RANGE   = "R";
+const NUM_WORD    = "W";
 const MEASUREMENT = "M";
 const INGREDIENT  = "I";
 const VERB        = "V";
@@ -67,9 +69,23 @@ function parseIngredient(string) {
       }
    }
    for (var i = 0; i < arr.length; i++) {
+      if(wordArray[i] == NUM_WORD) {
+         arr.splice(i,1,getSpelledNum(arr[i]));
+         wordArray.splice(i,1,NUM_WORD)
+         if (i < arr.length-1){
+            if(wordArray[i+1] == NUM_WORD) {
+               arr.splice(i,2,parseFloat(arr[i])*parseFloat(getSpelledNum(arr[i+1])));
+               wordArray.splice(i,1);
+            }
+         }
+      }
       if (i < arr.length-1){
          if (wordArray[i] == NUM && wordArray[i+1] == NUM) {
             arr.splice(i,2,parseFloat(arr[i])+parseFloat(arr[i+1]));
+            wordArray.splice(i,1);
+         }
+         if(wordArray[i] == NUM && wordArray[i+1] == NUM_WORD) {
+            arr.splice(i,2,parseFloat(arr[i])+parseFloat(getSpelledNum(arr[i+1])));
             wordArray.splice(i,1);
          }
       }
@@ -79,6 +95,12 @@ function parseIngredient(string) {
       if (i > 0 && i < arr.length-1){
          //at least one value on either side
          if (wordArray[i] == DASH) {
+            //hyphenated number words
+            if(wordArray[i-1] == NUM_WORD && wordArray[i+1] == NUM_WORD) {
+               var total = arr[i-1]+arr[i+1];
+               arr.splice(i-1,3,total);
+               wordArray.splice(i-1,3,NUM_WORD);
+            }
             //hyphenated word
             if(isWord(arr[i-1]) && isWord(arr[i+1])) {
                if (wordArray[i-1] == ADJECTIVE && wordArray[i+1] == UNKNOWN) {
@@ -155,6 +177,9 @@ function parseWord(str) {
    if (getNumber(str) != false) {
       return NUM;
    }
+   if (getSpelledNum(str) != false) {
+      return NUM_WORD;
+   }
    if (isMeasurement(str) != -1) {
       return MEASUREMENT;
    }
@@ -193,7 +218,7 @@ function parseWord(str) {
 }
 //made up of all letters
 function isWord(str) {
-   if (str.match(/^[a-zA-Z.-]*$/g) != null) {
+   if (str.toString().match(/^[a-zA-Z.-]*$/g) != null) {
       return true;
    }
    else {
@@ -230,6 +255,15 @@ function getNumber(str) {
    } else {
       return false;
    }
+}
+
+function getSpelledNum(str){
+   for (var i = 0; i < Object.values(numbers).length; i++) {
+      if (str == Object.keys(numbers)[i]) {
+         return Object.values(numbers)[i];
+      }
+   }
+   return false;
 }
 
 function getVulgarFraction(str) {
@@ -461,7 +495,7 @@ function spacePunctuation(str) {
 
    }
    //convert back with spaces
-   while(str.includes("▌")||str.includes("▐")){
+   while(str.includes("▌")||str.includes("▐")||str.includes("▄")||str.includes("▀")){
       str = str.replace("▌"," ( ");
       str = str.replace("▐"," ) ");
       str = str.replace("▄"," , ");
