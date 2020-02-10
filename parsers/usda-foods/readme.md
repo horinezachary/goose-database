@@ -2,7 +2,7 @@
 
 This parser uses 3 scripts in sequences:
 1. `parse_nutrients.py` generates a `nutrients.json` file with nutrient information
-2. `parse_ingredients.py` generates a 'foods.json` file with raw ingredient information
+2. `parse_ingredients.py` generates a `foods.json` file with raw ingredient information
 3. `filter_good_food_data.py` generates a `good_foods.json` file with only foods that have all of the required nutrients for the database
 
 # Requirements
@@ -42,5 +42,3 @@ Results are stored in the `good_foods.json` file, which is an object in the foll
   }
 }
 ```
-
-
