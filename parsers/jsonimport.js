@@ -4,19 +4,17 @@ var fs = require('fs');
 var foods = require('./generateFoodList');
 var jsonIn = require('./jsonOut.json');
 
-foods.generateFoods();
-
 var totalEntries = 0;
 
 var alldata = [];
 
 for (q = 0; q < jsonIn.length; q++) {
+   console.log("---"+q+"---");
    var rec = getRecipeData(jsonIn[q]);
    var ing = getIngredients(jsonIn[q]);
    var ins = getInstructions(jsonIn[q]);
    var entries = ing.length + ins.length + 1;
 
-   console.log("---"+q+"---");
    //console.log("Entries: "+entries);
    //console.log(rec);
    //console.log(ing);

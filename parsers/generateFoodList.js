@@ -36,6 +36,6 @@ function createJSON() {
 
 module.exports = {
    generateFoods: function() {
-      return createJSON()
+      return createJSON();
    }
 }

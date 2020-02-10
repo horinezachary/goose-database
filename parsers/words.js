@@ -27,7 +27,9 @@ var ignored = [
 var connectors = [
    "of",
    "for",
-   "if"
+   "if",
+   "or",
+   "and"
 ];
 module.exports = {
    verbs: verb,

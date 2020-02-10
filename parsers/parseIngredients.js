@@ -36,7 +36,6 @@ const END_PAREN   = "PE";
 const COMMA       = "PC";
 const DASH        = "PD";
 
-console.log(parseIngredient("450ml (about 2 cups) good-quality fish stock"));
 function parseIngredient(string) {
    var num = "";
    var variance = 0;
@@ -168,7 +167,7 @@ function parseIngredient(string) {
          unknownStrings.push({string,start,end});
       }
    }
-   console.log(unknownStrings);
+   //console.log(unknownStrings);
 
    //check against foods list
    var ret = checkFoods(unknownStrings,arr,wordArray);
@@ -201,8 +200,8 @@ function parseIngredient(string) {
    }
    text = text.trim();
    ingredient = ingredient.trim();
-   console.log(JSON.stringify(arr));
-   console.log(wordArray);
+   //console.log(JSON.stringify(arr));
+   //console.log(wordArray);
    //return wordArray;
    return {"size":num,"measurement":measurement,"variance":variance,"ingredient":ingredient,"text":text};
 }
@@ -215,9 +214,10 @@ function checkFoods(unknownStrings,arr,wordArray) {
          arr.splice(strObj.start,strObj.end-strObj.start+1,foods[j]);
          wordArray.splice(strObj.start,strObj.end-strObj.start+1,INGREDIENT);
       } else {
-         console.log(arr+"\n"+wordArray+"\n"+"UNKNOWN: "+strObj);
+         console.log(arr+"\n"+wordArray+"\n"+"UNKNOWN: "+Object.values(strObj));
       }
    }
+   return [arr,wordArray];
 }
 
 function checkSingleFood(unknown) {
@@ -281,7 +281,7 @@ function isWord(str) {
 
 //numbers or decimal
 function isNumber(str) {
-   if (str.match(/^[0-9.\/]*$/g) != null) {
+   if (str.toString().match(/^[0-9.\/]*$/g) != null) {
       return true;
    }
    else {
@@ -418,7 +418,7 @@ function vulgarFraction(str) {
 
 function isMeasurement(str) {
    //TODO: Simplify this
-   str = str.toLowerCase();
+   str = str.toString().toLowerCase();
    if (str.match(/^(fluid)$|^(fl)[.]?$/)) {
       return volume[4];
    }
