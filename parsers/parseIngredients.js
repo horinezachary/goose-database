@@ -130,8 +130,8 @@ function parseIngredient(string) {
          }
          if (run.includes('GNM') || run.includes('GRM')) {
             //about x amt, most likely an equivalency.
-            if (wordArray.join().match("N").length > 0 || wordArray.join().match("R") > 0) {
-               //there are more than one number values,
+            if (wordArray.join().match("N,M") != null || wordArray.join().match("R,M") != null) {
+               //there are more than one num/measurement values,
                //it is pretty safe to remove this one.
                var idx;
                if (run.includes('GNM')) {
@@ -177,8 +177,13 @@ function parseIngredient(string) {
 
 
    for (var i = 0; i < arr.length; i++) {
-      if (wordArray[i] == NUM || wordArray[i] == NUM_RANGE) {
-         num+=arr[i];
+      if (wordArray[i] == NUM) {
+         num = arr[i];
+      }
+      if (wordArray[i] == NUM_RANGE) {
+         var range = arr[i].split('-');
+         num = Math.min(range[0],range[1]) + Math.abs(range[0] - range[1])/2; //median
+         variance = Math.abs(range[0] - num);
       }
       if (wordArray[i] == MEASUREMENT) {
          measurement=arr[i];
@@ -198,7 +203,8 @@ function parseIngredient(string) {
    ingredient = ingredient.trim();
    console.log(JSON.stringify(arr));
    //return wordArray;
-   return {"size":num,"measurement":measurement,"ingredient":ingredient,"text":text};
+   return {"size":num,"measurement":measurement,"variance":variance,"ingredient":ingredient,"text":text};
+}
 
 function checkFoods(unknownStrings,arr,wordArray) {
    for (var i = 0; i < unknownStrings.length; i++) {
