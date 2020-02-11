@@ -220,6 +220,8 @@ function checkFoods(unknownStrings,arr,wordArray) {
          wordArray.splice(strObj.start,strObj.end-strObj.start+1,INGREDIENT);
       } else {
          console.log(arr+"\n"+wordArray+"\n"+"UNKNOWN: "+Object.values(strObj));
+         unknownWords.push(strObj.string);
+         fs.writeFile("./unknownWords.json", JSON.stringify(unknownWords),function(err, result) {if(err) console.log('error', err);});
       }
    }
    return [arr,wordArray];
@@ -334,7 +336,7 @@ function getVulgarFraction(str) {
          var vul = vulgarFraction(str[i]);
          if (vul != false) {
             if (vul == "/") {
-               return runningTotal / parseFloat(getNumber(str.substring(i)))
+               return runningTotal / parseFloat(getNumber(str.substring(i+1)))
             } else {
                runningTotal += vul;
                containsVul = true;

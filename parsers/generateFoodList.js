@@ -31,7 +31,7 @@ function createJSON() {
    for (var i = 0; i < manual.length; i++) {
       foods.push(manual[i]);
    }
-   fs.writeFile("./foods.json", JSON.stringify(foods),function(err, result) {if(err) console.log('error', err);});
+   fs.writeFile("./foods.json", JSON.stringify(foods)+"\n",function(err, result) {if(err) console.log('error', err);});
 }
 
 module.exports = {
