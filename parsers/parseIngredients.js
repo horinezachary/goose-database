@@ -108,7 +108,7 @@ function parseIngredient(string) {
             }
             //hyphenated word
             if(isWord(arr[i-1]) && isWord(arr[i+1])) {
-               if (wordArray[i-1] == ADJECTIVE && wordArray[i+1] == UNKNOWN) {
+               if ((wordArray[i-1] == ADJECTIVE || wordArray[i-1] == UNKNOWN) && wordArray[i+1] == UNKNOWN) {
                   arr.splice(i-1,3,arr[i-1]+"-"+arr[i+1]);
                   wordArray.splice(i,2);
                }
@@ -333,10 +333,14 @@ function getVulgarFraction(str) {
       for (var i = 0; i < str.length; i++) {
          var vul = vulgarFraction(str[i]);
          if (vul != false) {
-            runningTotal += vul;
-            containsVul = true;
-            runningTotal += runningNumber;
-            runningNumber = 0;
+            if (vul == "/") {
+               return runningTotal / parseFloat(getNumber(str.substring(i)))
+            } else {
+               runningTotal += vul;
+               containsVul = true;
+               runningTotal += runningNumber;
+               runningNumber = 0;
+            }
          }else {
             var char = getNumber(str[i]);
             if (char != false) {
@@ -414,6 +418,9 @@ function vulgarFraction(str) {
          break;
       case "⅞":
          return 7/8;
+         break;
+      case "⁄":
+         return "/";
          break;
       default:
          return false;
@@ -540,11 +547,12 @@ function isGarbage(str) {
 
 function spacePunctuation(str) {
    //convert to other ascii char
-   while(str.includes("(")||str.includes(")")||str.includes(",")||str.includes("-")){
+   while(str.includes("(")||str.includes(")")||str.includes(",")||str.includes("-")||str.includes("–")){
       str = str.replace("(","▌");
       str = str.replace(")","▐");
       str = str.replace(",","▄");
       str = str.replace("-","▀");
+      str = str.replace("–","▀");
 
    }
    //convert back with spaces
