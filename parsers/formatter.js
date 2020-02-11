@@ -2,8 +2,8 @@ function boxFormat(str) {
    var strs = str.split("\n");
    var longestLength = 0;
    for (i = 0; i < strs.length; i++) {
-      if (strs[i].length > longestLength) {
-         longestLength = strs[i].length;
+      if (strs[i].split(": ")[1].length > longestLength) {
+         longestLength = strs[i].split(": ")[1].length;
       }
    }
    var longestLabel = 0;
@@ -12,6 +12,7 @@ function boxFormat(str) {
          longestLabel = strs[i].split(": ")[0].length+2;
       }
    }
+   longestLength = longestLabel+longestLength;
    var data = "";
    for (i = 0; i < strs.length; i++) {
       var first = strs[i].split(": ")[0]+": ";
