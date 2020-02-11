@@ -6,11 +6,12 @@ var verb = [
    "using",
    "trimmed",
    "halved",
-   "drained"
+   "drained",
+   "smashed"
 ];
 var adverb = [
    "finely",
-
+   "Thickly",
    "thinly",
    "crosswise",
 ];
