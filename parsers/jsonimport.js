@@ -1,7 +1,6 @@
 var ingredient = require('./parseIngredients.js');
 var format = require('./formatter.js');
 var fs = require('fs');
-var foods = require('./generateFoodList');
 var jsonIn = require('./jsonOut.json');
 
 var totalEntries = 0;
@@ -26,7 +25,7 @@ for (q = 0; q < jsonIn.length; q++) {
 fs.writeFile("./output/parsed.json", JSON.stringify(alldata),function(err, result) {if(err) console.log('error', err);});
 
 console.log(format.box("File In: "+"jsonOut.json"+"\n"+
-                       "File Out: "+"parsed.json"+"\n"+
+                       "File Out: "+"/output/parsed.json"+"\n"+
                        "Total Recipes: "+Object.values(jsonIn).length+"\n"+
                        "Total Entries: "+totalEntries+"\n"+
                        "Average per Recipe: "+totalEntries/Object.values(jsonIn).length));
