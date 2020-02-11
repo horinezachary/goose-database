@@ -1,3 +1,6 @@
+const fs = require('fs');
+const format = require('./formatter.js');
+
 const measurement = require('./measurements.js');
 const weight      = measurement.weight;
 const weightAbbr  = measurement.weightAbbr;
@@ -12,6 +15,9 @@ const defmeasure  = measurement.defaultmeasurement;
 const numbers = require('./numbers.json');
 const words = require('./words.js');
 const foods = require('./foods.json');
+const manualAddFoods = require('./manualAddFoods.json');
+const unknownWords = require('./unknownWords.json');
+
 verbs = words.verbs;
 adverbs = words.adverbs;
 adjectives = words.adjectives;
@@ -90,7 +96,6 @@ function parseIngredient(string) {
          }
       }
    }
-
    for (var i = 0; i < arr.length; i++) {
       if (i > 0 && i < arr.length-1){
          //at least one value on either side
@@ -567,11 +572,11 @@ function checkCombined(str) {
    var s2 = parseWord(split2);
    if (s1 != UNKNOWN) {
       if (s2 != UNKNOWN) {
-         return [split1,split2];
+         return format.reduce([split1,split2]);
       } else {
          var ret = checkCombined(split2.slice(1));
          if (ret != false) {
-            return [split1,ret];
+            return format.reduce([split1,ret]);
          } else {
             return split1;
          }

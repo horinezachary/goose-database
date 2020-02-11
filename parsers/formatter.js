@@ -35,8 +35,27 @@ function boxFormat(str) {
    return ("┌"+dashstr+"┐\n"+data+"└"+dashstr+"┘");
 }
 
+function arrayReduce(arr) {
+   for (var i = 0; i < arr.length; i++) {
+      if (arr[i] == "") {
+         arr.splice(i,1);
+         i--;
+      }
+   }
+   if (arr == {} || arr == []) {
+      return false;
+   }
+   if (arr.length == 1) {
+      return arr[0];
+   }
+   return arr;
+}
+
 module.exports = {
    box: function(string) {
       return boxFormat(string);
+   },
+   reduce: function(arr) {
+      return arrayReduce(arr);
    }
 };
