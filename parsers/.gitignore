@@ -1,0 +1,5 @@
+output/*
+./foods.json
+./unknownWords.json
+./unknowns.out
+./manualAddFoods.json
