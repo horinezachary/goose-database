@@ -18,11 +18,11 @@ const foods = require('./foods.json');
 const manualAddFoods = require('./manualAddFoods.json');
 const unknownWords = require('./unknownWords.json');
 
-verbs = words.verbs;
-adverbs = words.adverbs;
-adjectives = words.adjectives;
-connectors = words.connectors;
-ignored = words.ignored;
+var verbs = words.verbs;
+var adverbs = words.adverbs;
+var adjectives = words.adjectives;
+var connectors = words.connectors;
+var ignored = words.ignored;
 
 const NUM         = "N";
 const NUM_RANGE   = "R";
