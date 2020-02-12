@@ -41,6 +41,7 @@ const START_PAREN = "PS";
 const END_PAREN   = "PE";
 const COMMA       = "PC";
 const DASH        = "PD";
+const SEMI_COLON  = "SC";
 
 function parseIngredient(string) {
    var num = "";
@@ -272,6 +273,9 @@ function parseWord(str) {
    }
    if (str == "-") {
       return DASH;
+   }
+   if (str == ";") {
+      return SEMI_COLON;
    }
    return UNKNOWN;
 
@@ -549,12 +553,13 @@ function isGarbage(str) {
 
 function spacePunctuation(str) {
    //convert to other ascii char
-   while(str.includes("(")||str.includes(")")||str.includes(",")||str.includes("-")||str.includes("–")){
+   while(str.includes("(")||str.includes(")")||str.includes(",")||str.includes("-")||str.includes("–")||str.includes(";")){
       str = str.replace("(","▌");
       str = str.replace(")","▐");
       str = str.replace(",","▄");
       str = str.replace("-","▀");
       str = str.replace("–","▀");
+      str = str.replace(";","█");
 
    }
    //convert back with spaces
@@ -563,6 +568,7 @@ function spacePunctuation(str) {
       str = str.replace("▐"," ) ");
       str = str.replace("▄"," , ");
       str = str.replace("▀"," - ");
+      str = str.replace("█"," ; ");
    }
    //remove double spaces
    while(str.includes("  ")){
