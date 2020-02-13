@@ -566,7 +566,7 @@ function spacePunctuation(str) {
 
    }
    //convert back with spaces
-   while(str.includes("▌")||str.includes("▐")||str.includes("▄")||str.includes("▀")||str.includes(";")){
+   while(str.includes("▌")||str.includes("▐")||str.includes("▄")||str.includes("▀")||str.includes("█")){
       str = str.replace("▌"," ( ");
       str = str.replace("▐"," ) ");
       str = str.replace("▄"," , ");
