@@ -1,4 +1,3 @@
-const fs = require('fs');
 const format = require('./formatter.js');
 
 const measurement = require('./measurements.js');

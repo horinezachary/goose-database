@@ -23,8 +23,8 @@ for (q = 0; q < jsonIn.length; q++) {
    totalEntries+=entries;
 }
 
-fs.writeFile("./output/parsed.json", JSON.stringify(alldata),function(err, result) {if(err) console.log('error', err);});
-fs.writeFile("./unknownWords.json", JSON.stringify(unknown)+"\n",function(err, result) {if(err) console.log('error', err);});
+fs.writeFile("./output/parsed.json", JSON.stringify(alldata,null,2),function(err, result) {if(err) console.log('error', err);});
+fs.writeFile("./unknownWords.json", JSON.stringify(unknown,null,2)+"\n",function(err, result) {if(err) console.log('error', err);});
 
 console.log(format.box("File In: "+"jsonOut.json"+"\n"+
                        "File Out: "+"/output/parsed.json"+"\n"+

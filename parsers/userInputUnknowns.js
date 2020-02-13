@@ -28,11 +28,11 @@ function element(addFoods,arr,i) {
                                          `or ${"s".underline.brightBlue}plit): `, function(ans) {
       console.log(i);
       if (ans == "q") {
-         fs.writeFile("./manualAddFoods.json", JSON.stringify(addFoods)+"\n",function(err, result) {
+         fs.writeFile("./manualAddFoods.json", JSON.stringify(addFoods,null,2)+"\n",function(err, result) {
             if(err) console.log('error', err);
             var wordsOut = [];
             wordsOut.push({"verbs":verbs,"adverbs": adverbs, "adjectives":adjectives,"ignored":ignored,"connectors":connectors});
-            fs.writeFile("./words.json", JSON.stringify(wordsOut)+"\n",function(err, result) {
+            fs.writeFile("./words.json", JSON.stringify(wordsOut,null,2)+"\n",function(err, result) {
                if(err) console.log('error', err);
                rl.close();
             });
@@ -102,11 +102,11 @@ function element(addFoods,arr,i) {
       }
       element(addFoods,arr,i);
       if (i == arr.length-1) {
-         fs.writeFile("./manualAddFoods.json", JSON.stringify(addFoods)+"\n",function(err, result) {
+         fs.writeFile("./manualAddFoods.json", JSON.stringify(addFoods,null,2)+"\n",function(err, result) {
             if(err) console.log('error', err);
             var wordsOut = [];
             wordsOut.push({"verbs":verbs,"adverbs": adverbs, "adjectives":adjectives,"ignored":ignored,"connectors":connectors});
-            fs.writeFile("./words.json", JSON.stringify(wordsOut)+"\n",function(err, result) {
+            fs.writeFile("./words.json", JSON.stringify(wordsOut,null,2)+"\n",function(err, result) {
                if(err) console.log('error', err);
                rl.close();
             });
