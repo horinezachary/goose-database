@@ -302,6 +302,9 @@ function isNumber(str) {
 
 //returns float, takes in fraction, vulgar, int or float
 function getNumber(str) {
+   if (str == "") {
+      return false;
+   }
    if (toString(str).includes("/")) {
       //fraction
       var arr = str.split("/");
@@ -563,7 +566,7 @@ function spacePunctuation(str) {
 
    }
    //convert back with spaces
-   while(str.includes("▌")||str.includes("▐")||str.includes("▄")||str.includes("▀")){
+   while(str.includes("▌")||str.includes("▐")||str.includes("▄")||str.includes("▀")||str.includes(";")){
       str = str.replace("▌"," ( ");
       str = str.replace("▐"," ) ");
       str = str.replace("▄"," , ");
@@ -576,7 +579,6 @@ function spacePunctuation(str) {
    }
    return str.trim();
 }
-
 function checkCombined(str) {
    if (str.length == 0) {
       return false;
