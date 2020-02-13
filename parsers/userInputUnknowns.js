@@ -7,8 +7,8 @@ const rl = readline.createInterface({
 });
 var foods = require('./foods.json');
 var arrIn = require('./unknownWords.json');
-var manualAddFoods = require('./addFoods.json');
-var words = require('./words.js');
+var manualAddFoods = require('./manualAddFoods.json');
+var words = require('./words.json')[0];
 var verbs = words.verbs;
 var adverbs = words.adverbs;
 var adjectives = words.adjectives;
@@ -27,21 +27,8 @@ function element(addFoods,arr,i) {
                                         `${"V".underline.brightBlue}erb, ${"I".underline.brightBlue}gnored `+
                                          `or ${"s".underline.brightBlue}plit): `, function(ans) {
       console.log(i);
-      var working = true;
-      var found = false;
-      var j = 0;
-      while(working) {
-         if (j >= foods.length){
-            working = false;
-         } else if (arr[i] == foods[j]) {
-            working = false;
-            found = true;
-         }
-         j++;
-      }
-
       if (ans == "q") {
-         fs.writeFile("./addFoods.json", JSON.stringify(addFoods)+"\n",function(err, result) {
+         fs.writeFile("./manualAddFoods.json", JSON.stringify(addFoods)+"\n",function(err, result) {
             if(err) console.log('error', err);
             var wordsOut = [];
             wordsOut.push({"verbs":verbs,"adverbs": adverbs, "adjectives":adjectives,"ignored":ignored,"connectors":connectors});
@@ -51,8 +38,9 @@ function element(addFoods,arr,i) {
             });
          });
       }
-      if (ans == "y") {
+      if (ans == "f") {
          addFoods.push(arr[i]);
+         console.log(addFoods[addFoods.length-1]);
       }
       if (ans == "s") {
          for (var j = 0; j < arr[i].split(" ").length; j++) {
@@ -74,9 +62,47 @@ function element(addFoods,arr,i) {
       if (ans == "i") {
          ignored.push(arr[i]);
       }
-      element(addFoods,arr,i+1);
+      i++;
+      var working = true;
+      var found = false;
+      var j = 0;
+      while(working) {
+         if (j >= foods.length || j >= addFoods.length){
+            working = false;
+         } else if (j < foods.length && arr[i] == foods[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         } else if (j < addFoods.length && arr[i] == addFoods[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         } else if(j < verbs.length && arr[i] == verbs[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         } else if(j < adverbs.length && arr[i] == adverbs[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         } else if(j < adjectives.length && arr[i] == adjectives[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         } else if(j < connectors.length && arr[i] == connectors[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         } else if(j < ignored.length && arr[i] == ignored[j]) {
+            console.log("already logged:"+arr[i]);
+            i++;
+            j = 0;
+         }
+         j++;
+      }
+      element(addFoods,arr,i);
       if (i == arr.length-1) {
-         fs.writeFile("./addFoods.json", JSON.stringify(addFoods)+"\n",function(err, result) {
+         fs.writeFile("./manualAddFoods.json", JSON.stringify(addFoods)+"\n",function(err, result) {
             if(err) console.log('error', err);
             var wordsOut = [];
             wordsOut.push({"verbs":verbs,"adverbs": adverbs, "adjectives":adjectives,"ignored":ignored,"connectors":connectors});
