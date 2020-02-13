@@ -6,6 +6,7 @@ var jsonIn = require('./jsonOut.json');
 var totalEntries = 0;
 
 var alldata = [];
+var unknown = [];
 
 for (q = 0; q < jsonIn.length; q++) {
    console.log("---"+q+"---");
@@ -23,6 +24,7 @@ for (q = 0; q < jsonIn.length; q++) {
 }
 
 fs.writeFile("./output/parsed.json", JSON.stringify(alldata),function(err, result) {if(err) console.log('error', err);});
+fs.writeFile("./unknownWords.json", JSON.stringify(unknown),function(err, result) {if(err) console.log('error', err);});
 
 console.log(format.box("File In: "+"jsonOut.json"+"\n"+
                        "File Out: "+"/output/parsed.json"+"\n"+
@@ -41,7 +43,12 @@ function getIngredients(recipe) {
    var ret = [];
    var ingredients = Object.values(recipe.ingredients);
    for (r = 0; r < ingredients.length; r++) {
-      ret.push(ingredient.parse(ingredients[r]));
+      var ing = ingredient.parse(ingredients[r]);
+      ret.push(ing[0]);
+      var unk = ing[1];
+      for (var s = 0; s < unk.length; s++) {
+         unknown.push(unk[s]);
+      }
    }
    return ret;
 }

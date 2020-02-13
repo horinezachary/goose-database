@@ -16,7 +16,6 @@ const numbers = require('./numbers.json');
 const words = require('./words.js');
 const foods = require('./foods.json');
 const manualAddFoods = require('./manualAddFoods.json');
-const unknownWords = require('./unknownWords.json');
 
 var verbs = words.verbs;
 var adverbs = words.adverbs;
@@ -44,6 +43,7 @@ const DASH        = "PD";
 const SEMI_COLON  = "SC";
 
 function parseIngredient(string) {
+//function parseIngredient(string,callback) {
    var num = "";
    var variance = 0;
    var measurement;
@@ -179,11 +179,12 @@ function parseIngredient(string) {
    var ret = checkFoods(unknownStrings,arr,wordArray);
    arr = ret[0];
    wordArray = ret[1];
+   var unknownWords = ret[2];
 
 
    for (var i = 0; i < arr.length; i++) {
       if (wordArray[i] == NUM) {
-         num = arr[i];
+         num = getNumber(arr[i]);
       }
       if (wordArray[i] == NUM_RANGE) {
          var range = arr[i].split('-');
@@ -209,10 +210,11 @@ function parseIngredient(string) {
    //console.log(JSON.stringify(arr));
    //console.log(wordArray);
    //return wordArray;
-   return {"size":num,"measurement":measurement,"variance":variance,"ingredient":ingredient,"text":text};
+   return [{"size":num,"measurement":measurement,"variance":variance,"ingredient":ingredient,"text":text},unknownWords];
 }
 
 function checkFoods(unknownStrings,arr,wordArray) {
+   var unknownWords = [];
    for (var i = 0; i < unknownStrings.length; i++) {
       var strObj = unknownStrings[i];
       var food = checkSingleFood(unknownStrings[i]);
@@ -220,12 +222,11 @@ function checkFoods(unknownStrings,arr,wordArray) {
          arr.splice(strObj.start,strObj.end-strObj.start+1,foods[j]);
          wordArray.splice(strObj.start,strObj.end-strObj.start+1,INGREDIENT);
       } else {
-         console.log(arr+"\n"+wordArray+"\n"+"UNKNOWN: "+Object.values(strObj));
+         //console.log(arr+"\n"+wordArray+"\n"+"UNKNOWN: "+Object.values(strObj));
          unknownWords.push(strObj.string);
-         fs.writeFile("./unknownWords.json", JSON.stringify(unknownWords),function(err, result) {if(err) console.log('error', err);});
       }
    }
-   return [arr,wordArray];
+   return [arr,wordArray,unknownWords];
 }
 
 function checkSingleFood(unknown) {
