@@ -13,7 +13,7 @@ const otherAbbr   = measurement.otherAbbr;
 const defmeasure  = measurement.defaultmeasurement;
 
 const numbers = require('./numbers.json');
-const words = require('./words.js');
+const words = require('./words.json')[0];
 const foods = require('./foods.json');
 const manualAddFoods = require('./manualAddFoods.json');
 
@@ -231,8 +231,8 @@ function checkFoods(unknownStrings,arr,wordArray) {
 
 function checkSingleFood(unknown) {
    for (j = 0; j < foods.length; j++) {
-      if (foods[j] == unknown.string) {
-         return foods[j];
+      if (foods[j].toLowerCase() == unknown.string.toString().toLowerCase()) {
+         return unknown.string;
       }
    }
    return false;
@@ -585,8 +585,8 @@ function checkCombined(str) {
       return false;
    }
    //var split = str.split(str.indexOf(str.match(/[a-z]/)));
-   var split1 = str.slice(0,str.indexOf(str.match(/[A-Za-z]/)));
-   var split2 = str.slice(str.indexOf(str.match(/[A-Za-z]/)));
+   var split1 = str.slice(0,str.indexOf(str.match(/[A-Z/a-z]/)));
+   var split2 = str.slice(str.indexOf(str.match(/[A-Z/a-z]/)));
    var s1 = parseWord(split1);
    var s2 = parseWord(split2);
    if (s1 != UNKNOWN) {
