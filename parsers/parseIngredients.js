@@ -229,9 +229,20 @@ function checkFoods(unknownStrings,arr,wordArray) {
 }
 
 function checkSingleFood(unknown) {
+   var count = 0;
    for (j = 0; j < foods.length; j++) {
       if (foods[j].toLowerCase() == unknown.string.toString().toLowerCase()) {
          return unknown.string;
+      }
+   }
+   for (j = 0; j < foods.length; j++) {
+      for (var k = 0; k < unknown.string.toString().length; k++) {
+         if (unknown.string.toString()[k] == foods[j]) {
+            count++;
+         }
+         if (count == unknown.string.toString().length) {
+            return unknown.string;
+         }
       }
    }
    return false;
