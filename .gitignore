@@ -5,3 +5,6 @@ config.js
 
 # server environment variables file
 ecosystem.config.js
+
+food_nutrient.csv
+foods.json

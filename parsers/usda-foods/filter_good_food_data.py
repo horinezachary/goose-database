@@ -17,13 +17,15 @@ required_nutrients = [
 ]
 
 
-def has_required_nutriends(food):
+def has_required_nutriends(food) -> bool:
     if "nutrients" not in food:
         return False
-    for nutrient in food["nutrients"]:
-        if nutrient["nutrient"]["name"] not in required_nutrients:
-            return False
-    return True
+    num_nutrients = 0
+    for nutrient in required_nutrients:
+        for n2 in food["nutrients"]:
+            if n2["nutrient"]["name"] == nutrient:
+                num_nutrients += 1
+    return num_nutrients >= 2
 
 
 good_foods = {}
