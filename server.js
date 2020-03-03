@@ -83,7 +83,7 @@ app.get('/search', function (req, res, next) {
          renderSearch(searchQuery, searchDomain, results);
       });
    }
-}
+});
 
 
 app.get('*', function (req, res) {
