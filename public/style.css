@@ -99,50 +99,71 @@ ul.recipe-body  {
    margin: 0 auto;
 }
 
+.search-bar {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   margin: 5px;
+}
+
 .navbar-search {
   float: right;
   margin-right: 20px;
   padding: 0;
 }
 
-.navbar-search-input {
+.search-input {
   padding: 4px;
   font-size: 16px;
-  background-color: #ddd;
   border: 1px solid #dadada;
   border-radius: 6px 0px 0px 6px;
-  width: 70px;
-  transition: width 1s;
+}
+
+.search-bar .search-input {
+    flex-grow: 1;
+}
+
+.navbar-search-input {
+   width: 70px;
+   transition: width 1s;
+   background-color: #ddd;
+}
+
+.search-input:focus {
+  outline: none;
 }
 
 .navbar-search-input:focus {
-  outline: none;
-  width: 500px;
-  background-color: #fff;
+   width: 500px;
+   background-color: #fff;
 }
 
-.navbar-search-input:focus + .navbar-search-button {
+.search-input:focus + .search-button {
    background-color: #fff;
    outline: none;
 }
 
-.navbar-search-button {
+.search-button {
   margin-left: -5px;
   padding: 4px;
   font-size: 16px;
-  background-color: #ddd;
   border: 1px solid #dadada;
   border-left-width: 0px;
   border-radius: 0px 6px 6px 0px;
   color: #343434;
   cursor: pointer;
+  background-color: #fff;
 }
 
-.navbar-search-button:hover {
+.navbar-search-button {
+   background-color: #ddd;
+}
+
+.search-button:hover {
   color: #196312;
 }
 
-.navbar-search-button:focus {
+.search-button:focus {
   color: #196312;
   outline: none;
 }
