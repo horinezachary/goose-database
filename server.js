@@ -41,6 +41,22 @@ app.get('/recipe', function (req, res, next) {
    })
 });
 
+app.get('/recipe/:r', function (req, res, next) {
+   var recipe = req.params.r;
+   con.query(`SELECT * FROM recipe WHERE id = ${recipe}`, function (err, recipe) {
+      con.query(`SELECT * FROM ingredient_row WHERE recipe = ${recipe} ORDER BY list_order`, function (err, ingredients) {
+         con.query(`SELECT * FROM instruction WHERE recipe = ${recipe} ORDER BY step`, function (err, instructions) {
+            res.status(200).render('recipe', {
+               title: recipe.title,
+               recipe: recipe,
+               ingredient: ingredients,
+               instruction: instructions,
+               layout: 'main'
+            });
+         });
+      });
+   });
+});
 
 
 app.get('*', function (req, res) {
