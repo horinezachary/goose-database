@@ -58,6 +58,33 @@ app.get('/recipe/:r', function (req, res, next) {
    });
 });
 
+function renderSearch(searchQuery, searchDomain, results) {
+   res.status(200).render('search', {
+      title: 'Search: '+searchQuery,
+      focus: searchDomain,
+      results: results,
+      layout: 'main'
+   });
+}
+
+app.get('/search', function (req, res, next) {
+   var searchQuery = req.query.q;
+   var searchDomain = req.query.d;
+   if (searchDomain == 'recipe' || searchDomain == '') {
+      con.query(`SELECT * FROM recipe WHERE title LIKE %${searchQuery.toString()}% `, function(err, results) {
+         renderSearch(searchQuery, searchDomain, results);
+      });
+   } else if (searchDomain == 'ingredient') {
+      con.query(`SELECT * FROM ingredient WHERE name LIKE %${searchQuery.toString()}% `, function(err, results) {
+         renderSearch(searchQuery, searchDomain, results);
+      });
+   } else if (searchDomain == 'author') {
+      con.query(`SELECT * FROM author WHERE name LIKE %${searchQuery.toString()}% `, function(err, results) {
+         renderSearch(searchQuery, searchDomain, results);
+      });
+   }
+}
+
 
 app.get('*', function (req, res) {
   res.status(404).render('404.handlebars', {
