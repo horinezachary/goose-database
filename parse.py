@@ -9,11 +9,10 @@ holdurl='https://www.epicurious.com'
 url = 'https://www.epicurious.com/search/?content=recipe'
 pageadd='&page='
 f = open('recipes.txt', 'a')
-i = 18
+i = 1
 while i:
     if i == 700:
         break
-    i+=1
     if i != 1:
         finalurl=url+pageadd+str(i)
     else:
@@ -36,5 +35,6 @@ while i:
         print(final)
         f.write('\n')
         f.write(final)
-
+    
+    i+=1
 f.close()
