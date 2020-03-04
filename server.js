@@ -75,15 +75,17 @@ app.get('/search', function (req, res, next) {
    var searchQuery = req.query.q;
    var searchDomain = req.query.d;
    if (searchDomain == 'recipe' || searchDomain == '') {
-      con.query(`SELECT * FROM recipe WHERE title LIKE %${searchQuery.toString()}% `, function(err, results) {
+      //con.query(`SELECT * FROM (SELECT * FROM recipe WHERE title LIKE '${searchQuery.toString()}') AS S NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
+      con.query(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
+         console.log(results);
          renderSearch(searchQuery,true,false,false, results, res);
       });
    } else if (searchDomain == 'ingredient') {
-      con.query(`SELECT * FROM ingredient WHERE name LIKE %${searchQuery.toString()}% `, function(err, results) {
+      con.query(`SELECT * FROM ingredient WHERE name LIKE "${searchQuery.toString()}" `, function(err, results) {
          renderSearch(searchQuery,false,true,false, results, res);
       });
    } else if (searchDomain == 'author') {
-      con.query(`SELECT * FROM author WHERE name LIKE %${searchQuery.toString()}% `, function(err, results) {
+      con.query(`SELECT * FROM author WHERE name LIKE "${searchQuery.toString()}" `, function(err, results) {
          renderSearch(searchQuery,false,false,true, results, res);
       });
    }
