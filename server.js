@@ -62,11 +62,13 @@ app.get('/recipe/:r', function (req, res, next) {
 function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
    var filler1 = false;
    var filler2 = false;
-   if (results.length%3>0) {
-      filler1 = true;
-   }
-   if (3-results.length%3>1) {
-      filler2 = true;
+   if (results != null) {
+      if (results.length%3>0) {
+         filler1 = true;
+      }
+      if (3-results.length%3>1) {
+         filler2 = true;
+      }
    }
    res.status(200).render('search', {
       title: 'Search: '+searchQuery,
@@ -92,10 +94,13 @@ app.get('/search', function (req, res, next) {
       });
    } else if (searchDomain == 'ingredient') {
       con.query(`SELECT * FROM ingredient WHERE name LIKE "${searchQuery.toString()}" `, function(err, results) {
+         console.log(results);
          renderSearch(searchQuery,false,true,false, results, res);
       });
    } else if (searchDomain == 'author') {
-      con.query(`SELECT * FROM author WHERE name LIKE "${searchQuery.toString()}" `, function(err, results) {
+      //con.query(`SELECT * FROM author WHERE author_name LIKE "${searchQuery.toString()}" `, function(err, results) {
+      con.query(`SELECT * FROM author NATURAL JOIN site`, function(err, results) {
+         console.log(results);
          renderSearch(searchQuery,false,false,true, results, res);
       });
    }

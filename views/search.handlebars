@@ -14,9 +14,21 @@
 </div>
 
 <div class="search-item-container">
-   {{#each results}}
-      {{> searchElement}}
-   {{/each}}
+   {{#if recipeFocus}}
+      {{#each results}}
+         {{> recipeSearchElement}}
+      {{/each}}
+   {{/if}}
+   {{#if ingredientFocus}}
+      {{#each results}}
+         {{> ingredientSearchElement}}
+      {{/each}}
+   {{/if}}
+   {{#if authorFocus}}
+      {{#each results}}
+         {{> authorSearchElement}}
+      {{/each}}
+   {{/if}}
    {{#if filler1}}
       <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
    {{/if}}
