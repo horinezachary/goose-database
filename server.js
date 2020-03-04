@@ -58,11 +58,14 @@ app.get('/recipe/:r', function (req, res, next) {
    });
 });
 
-function renderSearch(searchQuery, searchDomain, results, res) {
+//recipe,ingredient and author are boolean variables used to set the active state
+function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
    res.status(200).render('search', {
       title: 'Search: '+searchQuery,
       searchQuery: searchQuery,
-      focus: searchDomain,
+      recipeFocus: recipe,
+      ingredientFocus: ingredient,
+      authorFocus: author,
       results: results,
       layout: 'main'
    });
@@ -73,15 +76,15 @@ app.get('/search', function (req, res, next) {
    var searchDomain = req.query.d;
    if (searchDomain == 'recipe' || searchDomain == '') {
       con.query(`SELECT * FROM recipe WHERE title LIKE %${searchQuery.toString()}% `, function(err, results) {
-         renderSearch(searchQuery, searchDomain, results, res);
+         renderSearch(searchQuery,true,false,false, results, res);
       });
    } else if (searchDomain == 'ingredient') {
       con.query(`SELECT * FROM ingredient WHERE name LIKE %${searchQuery.toString()}% `, function(err, results) {
-         renderSearch(searchQuery, searchDomain, results, res);
+         renderSearch(searchQuery,false,true,false, results, res);
       });
    } else if (searchDomain == 'author') {
       con.query(`SELECT * FROM author WHERE name LIKE %${searchQuery.toString()}% `, function(err, results) {
-         renderSearch(searchQuery, searchDomain, results, res);
+         renderSearch(searchQuery,false,false,true, results, res);
       });
    }
 });

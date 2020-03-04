@@ -168,6 +168,37 @@ ul.recipe-body  {
   outline: none;
 }
 
+.search-header {
+   padding-bottom: 0px;
+}
+
+.filter-options {
+   margin-left: 5px;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+}
+
+.filter-button {
+   margin-right: 5px;
+   border: none;
+   background: none;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   border-bottom: 4px solid #fff;
+}
+
+.filter-button:hover {
+   background-color: #eee;
+   border-bottom-color: #eee;
+   color: #196312;
+}
+
+.filter-button.active {
+   border-bottom: 4px solid #196312;
+}
+
+
 .green-gradient {
    background: -webkit-linear-gradient(50deg,#3ca832,#196312)!important;
    background: -o-linear-gradient(50deg,#3ca832,#196312)!important;
