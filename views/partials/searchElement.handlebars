@@ -1,7 +1,24 @@
-<div class="card list text-center search-card search-item" style="width:95%; max-width:60rem;">
-   <div class="search-item-header float-left">
-      <h4 class="search-item-title"><a href="/r/{{recipe_id}}">{{title}}</a></h4>
-      <h6 class="search-item-author"><a href="/a/{{author_id}}">{{author_name}}</a></h6>
-      <h6 class="search-item-site">From: <a href="{{url}}">{{site_title}}</a></h6>
+{{#if recipeFocus}}
+   <div class="card list text-center search-card search-item" style="width:95%; max-width:60rem;">
+      <div class="search-item-header float-left">
+         <h4 class="search-item-title"><a href="/r/{{id}}">{{title}}</a></h4>
+         <h6 class="search-item-author"><a href="/a/{{author_id}}">{{author_name}}</a></h6>
+         <h6 class="search-item-site">From: <a href="{{url}}">{{site_title}}</a></h6>
+      </div>
    </div>
-</div>
+{{/if}}
+{{#if ingredientFocus}}
+   <div class="card list text-center search-card search-item" style="width:95%; max-width:60rem;">
+      <div class="search-item-header float-left">
+         <h4 class="search-item-title"><a href="/i/{{id}}">{{name}}</a></h4>
+      </div>
+   </div>
+{{/if}}
+{{#if authorFocus}}
+   <div class="card list text-center search-card search-item" style="width:95%; max-width:60rem;">
+      <div class="search-item-header float-left">
+         <h4 class="search-item-title"><a href="/a/{{author_id}}">{{author_name}}</a></h4>
+         <h6 class="search-item-site">From: <a href="{{base_url}}">{{site_title}}</a></h6>
+      </div>
+   </div>
+{{/if}}
