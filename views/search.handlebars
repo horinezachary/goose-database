@@ -17,4 +17,10 @@
    {{#each results}}
       {{> searchElement}}
    {{/each}}
+   {{#if filler1}}
+      <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
+   {{/if}}
+   {{#if filler2}}
+      <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
+   {{/if}}
 </div>

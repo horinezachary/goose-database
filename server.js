@@ -60,6 +60,14 @@ app.get('/recipe/:r', function (req, res, next) {
 
 //recipe,ingredient and author are boolean variables used to set the active state
 function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
+   var filler1 = false;
+   var filler2 = false;
+   if (results.length%3>0) {
+      filler1 = true;
+   }
+   if (3-results.length%3>1) {
+      filler2 = true;
+   }
    res.status(200).render('search', {
       title: 'Search: '+searchQuery,
       searchQuery: searchQuery,
@@ -67,6 +75,8 @@ function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
       ingredientFocus: ingredient,
       authorFocus: author,
       results: results,
+      filler1: filler1,
+      filler2: filler2,
       layout: 'main'
    });
 }
