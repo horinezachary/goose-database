@@ -86,6 +86,9 @@ function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
 app.get('/search', function (req, res, next) {
    var searchQuery = req.query.q;
    var searchDomain = req.query.d;
+   if (searchDomain == null) {
+      searchDomain = "recipe";
+   }
    if (searchDomain == 'recipe' || searchDomain == '') {
       //con.query(`SELECT * FROM (SELECT * FROM recipe WHERE title LIKE '${searchQuery.toString()}') AS S NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
       con.query(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
