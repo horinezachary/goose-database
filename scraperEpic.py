@@ -11,21 +11,26 @@ from selenium.common.exceptions import TimeoutException
 f = open('recipes.txt', 'r')
 
 def getAuthor(soup):
-    job_elem = soup.find('', {"class":"contributor"});
-    return job_elem['title']
+    try:
+        job_elem = soup.find('', {"class":"contributor"});
+        return job_elem['title']
+    except:
+        return 'none'
         
 def getYield(soup):
-    job_elem = soup.find_all('', {"class":"yield"})
-    return job_elem[1].contents[0]
+    try:
+        job_elem = soup.find_all('', {"class":"yield"})
+        return job_elem[1].contents[0]
+    except:
+        return 'none'
 
-#def getTime(driver, soup):
-  #  job_elem = soup.find_all('dl', {"class":"summary-data"})
-  #  try: 
- #       js = driver.find_element_by_class_name('active-time')
- #       print(js)
-#    except:
-  #      print("not found")
-num = 0
+def strip(instructions):
+    inst = instructions.split(".")
+    inst.pop()
+    return inst
+
+
+num = 4
 i = 0
 fileout = open('recipeJson' + str(num) + '.json', 'a')
 for line in f:
@@ -38,7 +43,7 @@ for line in f:
     scraper = scrape_me(line.rstrip())
     driver = webdriver.Chrome(executable_path='/home/ryan/Documents/goose-database/chromedriver')
     #driver = webdriver.Chrome()
-    driver.set_page_load_timeout(10)
+    driver.set_page_load_timeout(1)
     try:
         driver.get(line.rstrip())
     except TimeoutException:
@@ -50,8 +55,11 @@ for line in f:
     jsonOut["ingredients"] = scraper.ingredients()
  #   jsonOut["time"] = getTime(driver, soup)
     jsonOut["yield"] = getYield(soup)
-    jsonOut["directions"] = scraper.instructions()
+    jsonOut["cook_time"] = "none"
+    jsonOut["prep_time"] = "none"
+    jsonOut["directions"] = strip(scraper.instructions())
     jsonOut["url"] = line.rstrip()
+    jsonOut["source"] = "epicurious.com"
     json.dump(jsonOut, fileout, indent=4)
     driver.quit()
     i+=1
