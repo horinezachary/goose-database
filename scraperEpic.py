@@ -30,7 +30,7 @@ def strip(instructions):
     return inst
 
 
-num = 4
+num = 204
 i = 0
 fileout = open('recipeJson' + str(num) + '.json', 'a')
 for line in f:
