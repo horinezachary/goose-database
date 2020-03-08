@@ -30,7 +30,7 @@ const execute = async (query, values) => {
 };
 
 const makeOrFindSiteByName = async sourceName => {
-  const selectSiteName = "SELECT id FROM site WHERE site_title = ?";
+  const selectSiteName = "SELECT site_id FROM site WHERE site_title = ?";
   let [results] = await execute(selectSiteName, [sourceName]);
   if (results.length == 0) {
     const insertSite = "INSERT INTO site (site_title, base_url) VALUES (?, ?)";
@@ -38,21 +38,23 @@ const makeOrFindSiteByName = async sourceName => {
     const { insertId } = results;
     return insertId;
   }
-  const { id } = results[0];
-  return id;
+  const { site_id } = results[0];
+  return site_id;
 };
 
 const makeOrFindAuthorByName = async (authorName, siteId) => {
-  const selectAuthor = "SELECT id FROM author WHERE name = ? AND id = ?";
+  const selectAuthor =
+    "SELECT author_id FROM author WHERE author_name = ? AND site_id = ?";
   let [results] = await execute(selectAuthor, [authorName, siteId]);
   if (results.length == 0) {
-    const insertAuthor = "INSERT INTO author (name, site) VALUES (?, ?)";
+    const insertAuthor =
+      "INSERT INTO author (author_name, site_id) VALUES (?, ?)";
     const [results] = await execute(insertAuthor, [authorName, siteId]);
     const { insertId } = results;
     return insertId;
   }
-  const { id } = results[0];
-  return id;
+  const { author_id } = results[0];
+  return author_id;
 };
 
 const insertDirections = async (directions, recipeId) => {
@@ -71,7 +73,7 @@ const insertDirections = async (directions, recipeId) => {
 
 const submitRecipe = async recipe => {
   const insertRecipe =
-    "INSERT INTO recipe (source, author, url, title, cook_time, prep_time) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO recipe (site_id, author_id, url, title, cook_time, prep_time) VALUES (?, ?, ?, ?, ?, ?)";
 
   if (
     !("source" in recipe) ||
