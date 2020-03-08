@@ -10,6 +10,7 @@ from itertools import repeat
 from multiprocessing import Pool, cpu_count
 
 
+f = open('recipes.txt', 'r')
 def getAuthor(soup):
     try:
         job_elem = soup.find_all('', {"class":"submitter__name"});
@@ -30,16 +31,16 @@ def strip(instructions):
     return inst
 
 def scrape(num):
-    
+    fileNum=0
     i = 0
-    fileout = open('recipeJson' + str(num) + '.json', 'a')
+    fileout = open('recipeJson' + str(fileNum) + '.json', 'a')
     fileout.write("{\n")
     for line in f:
         if i > 50 :
             fileout.write("}")
             fileout.close()
-            num+=1
-            fileout = open('recipeJson' + str(num) + '.json', 'a')
+            fileNum+=1
+            fileout = open('recipeJson' + str(fileNum) + '.json', 'a')
             i = 0
         jsonOut = {}
         scraper = scrape_me(line.rstrip())
@@ -73,9 +74,8 @@ def scrape(num):
 
 if __name__ == '__main__':
 
-    f = open('recipes.txt', 'r')
     with Pool(cpu_count()-1) as p:
-        p.starmap(scrape, zip(range(1,20)))
+        p.starmap(scrape, zip(range(1,2000)))
     p.close()
     p.join()
     f.close()
