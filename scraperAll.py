@@ -1,0 +1,81 @@
+#!/bin/python
+import sys
+import json
+from recipe_scrapers import scrape_me 
+import requests
+from bs4 import BeautifulSoup 
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from itertools import repeat
+from multiprocessing import Pool, cpu_count
+
+
+def getAuthor(soup):
+    try:
+        job_elem = soup.find_all('', {"class":"submitter__name"});
+        return job_elem[0].contents[0]
+    except:
+        return 'none'
+        
+def getYield(soup):
+    try:
+        job_elem = soup.find_all('', {"class":"yield"})
+        return job_elem[1].contents[0]
+    except:
+        return 'none'
+
+def strip(instructions):
+    inst = instructions.split(".")
+    inst.pop()
+    return inst
+
+def scrape(num):
+    
+    i = 0
+    fileout = open('recipeJson' + str(num) + '.json', 'a')
+    fileout.write("{\n")
+    for line in f:
+        if i > 50 :
+            fileout.write("}")
+            fileout.close()
+            num+=1
+            fileout = open('recipeJson' + str(num) + '.json', 'a')
+            i = 0
+        jsonOut = {}
+        scraper = scrape_me(line.rstrip())
+        driver = webdriver.Chrome(executable_path='/home/ryan/Documents/goose-database/chromedriver')
+        #driver = webdriver.Chrome()
+        driver.set_page_load_timeout(1)
+        try:
+            driver.get(line.rstrip())
+        except TimeoutException:
+            driver.execute_script("window.stop();")
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+    
+        jsonOut["author"] = getAuthor(soup)
+        jsonOut["title"] = scraper.title()
+        jsonOut["ingredients"] = scraper.ingredients()
+ #      jsonOut["time"] = getTime(driver, soup)
+        jsonOut["yield"] = scraper.yields()
+        jsonOut["cook_time"] = scraper.total_time()
+        jsonOut["prep_time"] = "none"
+        jsonOut["directions"] = strip(scraper.instructions())
+        jsonOut["url"] = line.rstrip()
+        jsonOut["source"] = "allrecipes.com"
+        json.dump(jsonOut, fileout, indent=4)
+        fileout.write(",")
+        driver.quit()
+        i+=1
+        print(json.dumps(jsonOut, indent=4))
+
+
+
+
+if __name__ == '__main__':
+
+    f = open('recipes.txt', 'r')
+    with Pool(cpu_count()-1) as p:
+        p.starmap(scrape, zip(range(1,20)))
+    p.close()
+    p.join()
+    f.close()
