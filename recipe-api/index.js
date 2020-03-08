@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require("mysql");
+const pino = require("express-pino-logger")();
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -10,10 +11,12 @@ var pool = mysql.createPool({
   user: process.env.DBUSER || "root",
   password: process.env.DBPWD || "password",
   database: process.env.DBNAME || "recipes",
-  port: process.env.DBPORT || 3306
+  port: process.env.DBPORT || 3306,
+  insecureAuth: true
 });
 
 app.use(express.json());
+app.use(pino);
 
 const execute = async (query, values) => {
   return new Promise((resolve, reject) => {
@@ -21,30 +24,92 @@ const execute = async (query, values) => {
       if (error) {
         reject(error);
       }
-      resolve([result, fields]);
+      resolve([results, fields]);
     });
   });
 };
 
-const submitRecipe = async recipe => {
-  const insertRecipe =
-    "INSERT INTO recipe (source, url, title, author, cook_time, prep_time) VALUES (?, ?, ?, ?, ?, ?)";
-
-  let params = [
-    "source" in recipe ? recipe["source"] : "",
-    recipe["url"],
-    recipe["title"],
-    recipe["author"],
-    0,
-    0
-  ];
-  let(results, fields) = await execute(insertRecipe, params);
+const makeOrFindSiteByName = async sourceName => {
+  const selectSiteName = "SELECT id FROM site WHERE site_title = ?";
+  let [results] = await execute(selectSiteName, [sourceName]);
+  if (results.length == 0) {
+    const insertSite = "INSERT INTO site (site_title, base_url) VALUES (?, ?)";
+    const [results] = await execute(insertSite, [sourceName, 0]);
+    const { insertId } = results;
+    return insertId;
+  }
+  const { id } = results[0];
+  return id;
 };
 
-app.post("/recipes", (req, res) => {
-  console.log(req.body);
-  data = req.body.data;
-  res.send(data);
+const makeOrFindAuthorByName = async (authorName, siteId) => {
+  const selectAuthor = "SELECT id FROM author WHERE name = ? AND id = ?";
+  let [results] = await execute(selectAuthor, [authorName, siteId]);
+  if (results.length == 0) {
+    const insertAuthor = "INSERT INTO author (name, site) VALUES (?, ?)";
+    const [results] = await execute(insertAuthor, [authorName, siteId]);
+    const { insertId } = results;
+    return insertId;
+  }
+  const { id } = results[0];
+  return id;
+};
+
+const insertDirections = async (directions, recipeId) => {
+  const insertDirections = `
+    INSERT INTO instruction (recipe, step, text)
+    VALUES
+      ${directions.map(() => "(?, ?, ?)").join(", ")}
+  `;
+
+  const params = [].concat.apply(
+    [],
+    directions.map((direction, index) => [recipeId, index + 1, direction])
+  );
+  await execute(insertDirections, params);
+};
+
+const submitRecipe = async recipe => {
+  const insertRecipe =
+    "INSERT INTO recipe (source, author, url, title, cook_time, prep_time) VALUES (?, ?, ?, ?, ?, ?)";
+
+  if (
+    !("source" in recipe) ||
+    !("author" in recipe) ||
+    !("url" in recipe) ||
+    !("title" in recipe) ||
+    !("cook_time" in recipe) ||
+    !("prep_time" in recipe) ||
+    !("directions" in recipe)
+  ) {
+    throw new Error("missing elements of recipe body");
+  }
+
+  let siteId = await makeOrFindSiteByName(recipe["source"]);
+  let authorId = await makeOrFindAuthorByName(recipe["author"], siteId);
+  let params = [
+    siteId,
+    authorId,
+    recipe["url"],
+    recipe["title"],
+    recipe["cook_time"] == "none" ? 0 : recipe["cook_time"],
+    recipe["prep_time"] == "none" ? 0 : recipe["prep_time"]
+  ];
+  const [results] = await execute(insertRecipe, params);
+  const { insertId } = results;
+  await insertDirections(recipe["directions"], insertId);
+};
+
+app.post("/recipes", async (req, res, next) => {
+  let data = req.body.data;
+  req.log.info(data);
+  try {
+    await Promise.all(data.map(recipe => submitRecipe(recipe)));
+    res.status(204).send("");
+  } catch (e) {
+    req.log.error(e);
+    next(e);
+  }
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
