@@ -13,17 +13,24 @@ from multiprocessing import Pool, cpu_count
 f = open('recipes.txt', 'r')
 def getAuthor(soup):
     try:
-        job_elem = soup.find_all('', {"class":"submitter__name"});
-        return job_elem[0].contents[0]
+        job_elem = soup.find_all('', {"class":"chef__image-link"});
+        return job_elem[0]['title']
     except:
         return 'none'
-        
 def getYield(soup):
     try:
         job_elem = soup.find_all('', {"class":"yield"})
         return job_elem[1].contents[0]
     except:
         return 'none'
+
+def getPrep(soup):
+    try:
+        job_elem = soup.find_all('', {"class":"recipe-metadata__prep-time"})
+        return job_elem[0].contents[0]
+    except:
+        return 'none'
+
 
 def strip(instructions):
     inst = instructions.split(".")
@@ -34,10 +41,10 @@ def scrape(num):
     fileNum=0
     i = 0
     fileout = open('recipeJson' + str(fileNum) + '.json', 'a')
-    fileout.write("{\n")
+    fileout.write("[")
     for line in f:
         if i > 50 :
-            fileout.write("}")
+            fileout.write("]")
             fileout.close()
             fileNum+=1
             fileout = open('recipeJson' + str(fileNum) + '.json', 'a')
@@ -46,7 +53,7 @@ def scrape(num):
         scraper = scrape_me(line.rstrip())
         driver = webdriver.Chrome(executable_path='/home/ryan/Documents/goose-database/chromedriver')
         #driver = webdriver.Chrome()
-        driver.set_page_load_timeout(1)
+        driver.set_page_load_timeout(2)
         try:
             driver.get(line.rstrip())
         except TimeoutException:
@@ -56,24 +63,24 @@ def scrape(num):
         jsonOut["author"] = getAuthor(soup)
         jsonOut["title"] = scraper.title()
         jsonOut["ingredients"] = scraper.ingredients()
- #      jsonOut["time"] = getTime(driver, soup)
         jsonOut["yield"] = scraper.yields()
         jsonOut["cook_time"] = scraper.total_time()
-        jsonOut["prep_time"] = "none"
+        jsonOut["prep_time"] = getPrep(soup)
         jsonOut["directions"] = strip(scraper.instructions())
         jsonOut["url"] = line.rstrip()
-        jsonOut["source"] = "allrecipes.com"
+        jsonOut["source"] = "bbc.co.uk"
         json.dump(jsonOut, fileout, indent=4)
         fileout.write(",")
         driver.quit()
         i+=1
-        print(json.dumps(jsonOut, indent=4))
+        #print(json.dumps(jsonOut, indent=4))
 
 
 
 
 if __name__ == '__main__':
 
+    #scrape(5)
     with Pool(cpu_count()-1) as p:
         p.starmap(scrape, zip(range(1,2000)))
     p.close()

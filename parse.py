@@ -1,22 +1,21 @@
 #!/bin/python
+import sys
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 
-holdurl='https://www.allrecipes.com'
+holdurl='https://www.bbc.co.uk'
 
-url = 'https://www.allrecipes.com/recipes/94/soups-stews-and-chili/?internalSource=top%20hubs&referringContentType=Homepage'
-pageadd='&page='
+#url = 'https://www.bbc.co.uk/food/recipes/a-z/a/'
+url = str(sys.argv[1])
 f = open('recipes.txt', 'a')
-i = 2
+i = 1
 while i:
-    if i == 500:
+    if i == (int(sys.argv[2])+1):
         break
-    if i != 1:
-        finalurl=url+pageadd+str(i)
-    else:
-        finalurl=url
+    
+    finalurl=url+str(i)
 
     driver = webdriver.Chrome(executable_path='/home/ryan/Documents/goose-database/chromedriver')
     driver.set_page_load_timeout(2)
@@ -26,12 +25,13 @@ while i:
         driver.execute_script("window.stop();")
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     driver.quit()
-    job_elems = soup.find_all('', {"class":"fixed-recipe-card"})
+    job_elems = soup.find_all('div', {"class":"gel-layout__item gel-1/2 gel-1/3@m gel-1/4@xl"})
     for job_elem in job_elems:
-        ref=job_elem.find('', {"class":"grid-card-image-container"})
-        final=ref.find('a')
-        print(final['href'])
+        #ref=job_elem.find('', {"class":"grid-card-image-container"})
+        #print(job_elem)
+        final=job_elem.find('a')
+        print(holdurl+final['href'])
         f.write('\n')
-        f.write(final['href'])
+        f.write(holdurl+final['href'])
     i+=1
 f.close()
