@@ -9,3 +9,5 @@ krogerAPICreds.js
 
 # server environment variables file
 ecosystem.config.js
+
+.env
