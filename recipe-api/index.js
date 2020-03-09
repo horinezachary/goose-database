@@ -209,7 +209,7 @@ app.post("/recipes", async (req, res, next) => {
       .map((result, index) =>
         result.status == "rejected" ? data[index] : null
       )
-      .filter(result => result != null);
+      .filter(result => result.status == null);
     res.send({ errorRecipes: errors });
   } catch (e) {
     req.log.error(e);
