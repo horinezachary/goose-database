@@ -35,7 +35,11 @@ const execute = async (query, values) => {
 };
 
 const handleFraction = number => {
-  return math.number(math.fraction(number));
+  if (number.match(/\d+\/d+/)) {
+    return math.number(math.fraction(number));
+  } else {
+    return math.number(number.match(/\d+/)[0]);
+  }
 };
 
 const makeOrFindSiteByName = async sourceName => {
@@ -105,11 +109,15 @@ const createOrInsertMeasurement = async measurement => {
 const createOrInsertIngredient = async (ingredient, recipeId, index) => {
   let id;
   let measurementId = 1;
+
+  let name = "name" in ingredient ? ingredient.name : "unknown";
+
   const selectIngredient = `SELECT ingredient_id FROM ingredient WHERE name = ?`;
-  const [results] = await execute(selectIngredient, [ingredient.name]);
+  const [results] = await execute(selectIngredient, [name]);
+
   if (results.length == 0) {
     const insertIngredient = `INSERT INTO ingredient (name) VALUES (?)`;
-    const result = await execute(insertIngredient, [ingredient.name]);
+    const result = await execute(insertIngredient, [name]);
     id = result.insertId;
   } else {
     id = results[0].ingredient_id;
