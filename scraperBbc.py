@@ -74,23 +74,23 @@ def scrape(index, total_processes, outList, recipes):
         driver.set_page_load_timeout(10)
         try:
             driver.get(recipe.rstrip())
+            soup = BeautifulSoup(driver.page_source, "html.parser")
+
+            jsonOut["author"] = getAuthor(soup)
+            jsonOut["title"] = scraper.title()
+            jsonOut["ingredients"] = scraper.ingredients()
+            jsonOut["yield"] = scraper.yields()
+            jsonOut["cook_time"] = scraper.total_time()
+            jsonOut["prep_time"] = getPrep(soup)
+            jsonOut["directions"] = strip(scraper.instructions())
+            jsonOut["url"] = recipe.rstrip()
+            jsonOut["source"] = "bbc.co.uk"
+            driver.quit()
+
+            # add data to the output list data structure
+            outList.append(jsonOut)
         except TimeoutException:
-            driver.execute_script("window.stop();")
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-
-        jsonOut["author"] = getAuthor(soup)
-        jsonOut["title"] = scraper.title()
-        jsonOut["ingredients"] = scraper.ingredients()
-        jsonOut["yield"] = scraper.yields()
-        jsonOut["cook_time"] = scraper.total_time()
-        jsonOut["prep_time"] = getPrep(soup)
-        jsonOut["directions"] = strip(scraper.instructions())
-        jsonOut["url"] = recipe.rstrip()
-        jsonOut["source"] = "bbc.co.uk"
-        driver.quit()
-
-        # add data to the output list data structure
-        outList.append(jsonOut)
+            print(f"time out parsing url {recipe}")
 
 
 if __name__ == "__main__":
