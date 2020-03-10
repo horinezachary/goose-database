@@ -5,37 +5,34 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 
-holdurl = "https://www.bbc.co.uk"
-
-# url = 'https://www.bbc.co.uk/food/recipes/a-z/a/'
-url = str(sys.argv[1])
+url = 'https://www.food.com/recipe?ref=nav'
+pageadd='&pn=3'
 f = open("recipes.txt", "a")
 i = 1
 while i:
-    if i == (int(sys.argv[2]) + 1):
-        break
 
-    finalurl = url + str(i)
-
+    if i == 1:
+        finalurl=url
+    else:
+        finalurl= url+pageadd+str(i)
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     driver = webdriver.Chrome(chrome_options=options)
-    driver.set_page_load_timeout(10)
+    driver.set_page_load_timeout(2)
     try:
         driver.get(finalurl)
     except TimeoutException:
-        driver.execute_script("window.stop();")
+        print('timeout')
+
+
     soup = BeautifulSoup(driver.page_source, "html.parser")
     driver.quit()
     job_elems = soup.find_all(
-        "div", {"class": "gel-layout__item gel-1/2 gel-1/3@m gel-1/4@xl"}
+        "", {"class": "fd-tile fd-recipe"}
     )
     for job_elem in job_elems:
-        # ref=job_elem.find('', {"class":"grid-card-image-container"})
-        # print(job_elem)
-        final = job_elem.find("a")
-        print(holdurl + final["href"])
-        f.write("\n")
-        f.write(holdurl + final["href"])
-    i += 1
+         f.write("\n")
+         f.write(job_elem['data-url'])
+    i+=1
+    
 f.close()
