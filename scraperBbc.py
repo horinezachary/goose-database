@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from itertools import repeat
-from multiprocessing import Pool, cpu_count, Queue
+from multiprocessing import Pool, cpu_count, Manager
+
+sys.setrecursionlimit(10000)
 
 
 f = open("recipes.txt", "r")
@@ -43,12 +45,20 @@ def strip(instructions):
     return inst
 
 
-def scrape(num):
+def scrape(index, total_processes, outList, recipes):
     fileNum = 0
     i = 0
-    fileout = open("recipeJson" + str(fileNum) + ".json", "a")
-    fileout.write("[")
-    for line in f:
+
+    # splitting the full recipes list into chunks of size len(recipes) / total_processes
+    minIndex = int(index * len(recipes) / total_processes)
+    maxIndex = minIndex + int(len(recipes) / total_processes)
+    localRecipes = recipes[minIndex:maxIndex]
+
+    # if there are "extra" recipes, give them to the last process
+    if index == total_processes - 1 and len(recipes) >= maxIndex - 1:
+        localRecipes += recipes[maxIndex:]
+
+    for recipe in localRecipes:
         if i > 50:
             fileout.write("]")
             fileout.close()
@@ -56,12 +66,14 @@ def scrape(num):
             fileout = open("recipeJson" + str(fileNum) + ".json", "a")
             i = 0
         jsonOut = {}
-        scraper = scrape_me(line.rstrip())
-        driver = webdriver.Chrome()
+        scraper = scrape_me(recipe.rstrip())
+        options = webdriver.ChromeOptions()
+        options.add_argument("headless")
+        driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome()
-        driver.set_page_load_timeout(2)
+        driver.set_page_load_timeout(10)
         try:
-            driver.get(line.rstrip())
+            driver.get(recipe.rstrip())
         except TimeoutException:
             driver.execute_script("window.stop();")
         soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -73,21 +85,35 @@ def scrape(num):
         jsonOut["cook_time"] = scraper.total_time()
         jsonOut["prep_time"] = getPrep(soup)
         jsonOut["directions"] = strip(scraper.instructions())
-        jsonOut["url"] = line.rstrip()
+        jsonOut["url"] = recipe.rstrip()
         jsonOut["source"] = "bbc.co.uk"
-        json.dump(jsonOut, fileout, indent=4)
-        fileout.write(",")
         driver.quit()
-        i += 1
-        # print(json.dumps(jsonOut, indent=4))
+
+        # add data to the output list data structure
+        outList.append(jsonOut)
 
 
 if __name__ == "__main__":
 
-    q = Queue()
-    # scrape(5)
-    with Pool(cpu_count() - 1) as p:
-        p.starmap(scrape, zip(range(1, 2000)))
-    p.close()
-    p.join()
-    f.close()
+    recipes = f.read().splitlines()
+    with Manager() as m:
+        data = m.list()
+        num_cpus = cpu_count()
+        with Pool(num_cpus) as p:
+            p.starmap(
+                scrape,
+                zip(
+                    range(num_cpus),
+                    [num_cpus for _ in range(num_cpus)],
+                    [data for _ in range(num_cpus)],
+                    [recipes for _ in range(num_cpus)],
+                ),
+            )
+        p.close()
+        p.join()
+        f.close()
+
+        with open("outRecipes.json", "w+") as f:
+            outData = {"data": list(data)}
+            json.dump(outData, f)
+
