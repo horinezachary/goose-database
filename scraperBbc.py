@@ -71,7 +71,7 @@ def scrape(index, total_processes, outList, recipes):
         options.add_argument("headless")
         driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome()
-        driver.set_page_load_timeout(10)
+        driver.set_page_load_timeout(5)
         try:
             driver.get(recipe.rstrip())
             soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     recipes = f.read().splitlines()
     with Manager() as m:
         data = m.list()
-        num_cpus = cpu_count()
+        num_cpus = cpu_count() * 2
         with Pool(num_cpus) as p:
             p.starmap(
                 scrape,
