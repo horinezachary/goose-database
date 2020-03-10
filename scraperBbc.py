@@ -1,35 +1,40 @@
 #!/bin/python
 import sys
 import json
-from recipe_scrapers import scrape_me 
+from recipe_scrapers import scrape_me
 import requests
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from itertools import repeat
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, Queue
 
 
-f = open('recipes.txt', 'r')
+f = open("recipes.txt", "r")
+
+
 def getAuthor(soup):
     try:
-        job_elem = soup.find_all('', {"class":"chef__image-link"});
-        return job_elem[0]['title']
+        job_elem = soup.find_all("", {"class": "chef__image-link"})
+        return job_elem[0]["title"]
     except:
-        return 'none'
+        return "none"
+
+
 def getYield(soup):
     try:
-        job_elem = soup.find_all('', {"class":"yield"})
+        job_elem = soup.find_all("", {"class": "yield"})
         return job_elem[1].contents[0]
     except:
-        return 'none'
+        return "none"
+
 
 def getPrep(soup):
     try:
-        job_elem = soup.find_all('', {"class":"recipe-metadata__prep-time"})
+        job_elem = soup.find_all("", {"class": "recipe-metadata__prep-time"})
         return job_elem[0].contents[0]
     except:
-        return 'none'
+        return "none"
 
 
 def strip(instructions):
@@ -37,29 +42,30 @@ def strip(instructions):
     inst.pop()
     return inst
 
+
 def scrape(num):
-    fileNum=0
+    fileNum = 0
     i = 0
-    fileout = open('recipeJson' + str(fileNum) + '.json', 'a')
+    fileout = open("recipeJson" + str(fileNum) + ".json", "a")
     fileout.write("[")
     for line in f:
-        if i > 50 :
+        if i > 50:
             fileout.write("]")
             fileout.close()
-            fileNum+=1
-            fileout = open('recipeJson' + str(fileNum) + '.json', 'a')
+            fileNum += 1
+            fileout = open("recipeJson" + str(fileNum) + ".json", "a")
             i = 0
         jsonOut = {}
         scraper = scrape_me(line.rstrip())
-        driver = webdriver.Chrome(executable_path='/home/ryan/Documents/goose-database/chromedriver')
-        #driver = webdriver.Chrome()
+        driver = webdriver.Chrome()
+        # driver = webdriver.Chrome()
         driver.set_page_load_timeout(2)
         try:
             driver.get(line.rstrip())
         except TimeoutException:
             driver.execute_script("window.stop();")
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-    
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+
         jsonOut["author"] = getAuthor(soup)
         jsonOut["title"] = scraper.title()
         jsonOut["ingredients"] = scraper.ingredients()
@@ -72,17 +78,16 @@ def scrape(num):
         json.dump(jsonOut, fileout, indent=4)
         fileout.write(",")
         driver.quit()
-        i+=1
-        #print(json.dumps(jsonOut, indent=4))
+        i += 1
+        # print(json.dumps(jsonOut, indent=4))
 
 
+if __name__ == "__main__":
 
-
-if __name__ == '__main__':
-
-    #scrape(5)
-    with Pool(cpu_count()-1) as p:
-        p.starmap(scrape, zip(range(1,2000)))
+    q = Queue()
+    # scrape(5)
+    with Pool(cpu_count() - 1) as p:
+        p.starmap(scrape, zip(range(1, 2000)))
     p.close()
     p.join()
     f.close()
