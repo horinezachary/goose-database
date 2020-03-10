@@ -17,11 +17,10 @@ f = open("recipes.txt", "r")
 
 def getAuthor(soup):
     try:
-        job_elem = soup.find_all("", {"class": "chef__image-link"})
-        return job_elem[0]["title"]
+        job_elem = soup.find("", {"class": "o-Attribution__a-Name"})
+        return job_elem.find('a').contents
     except:
-        return "none"
-
+        return 'none'
 
 def getYield(soup):
     try:
@@ -77,7 +76,7 @@ def scrape(index, total_processes, outList, recipes):
         except TimeoutException:
             driver.execute_script("window.stop();")
         soup = BeautifulSoup(driver.page_source, "html.parser")
-
+        print(recipe)
         jsonOut["author"] = getAuthor(soup)
         jsonOut["title"] = scraper.title()
         jsonOut["ingredients"] = scraper.ingredients()
@@ -86,7 +85,7 @@ def scrape(index, total_processes, outList, recipes):
         jsonOut["prep_time"] = getPrep(soup)
         jsonOut["directions"] = strip(scraper.instructions())
         jsonOut["url"] = recipe.rstrip()
-        jsonOut["source"] = "bbc.co.uk"
+        jsonOut["source"] = "foodnetwork.com"
         driver.quit()
 
         # add data to the output list data structure
