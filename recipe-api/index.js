@@ -20,7 +20,7 @@ var pool = mysql.createPool({
   insecureAuth: true
 });
 
-app.use(express.json());
+app.use(express.json({ limit: "200kb" }));
 app.use(pino);
 
 const execute = async (query, values) => {
