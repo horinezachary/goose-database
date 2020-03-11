@@ -1,14 +1,9 @@
+var mysql = require('mysql');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
+var con = require('./sqlConfig');
 
-var mysql = require('mysql');
-
-var con = mysql.createConnection(config.database);
-
-con.connect(function(err) {
-   if (err) throw err;
-   console.log("Connected to mysql!");
-});
+con.start(config.database);
 
 var path = require('path');
 var express = require('express');
@@ -28,6 +23,20 @@ app.use(bodyParser.json());
 app.get('/', function (req, res, next) {
    res.status(200).render('home', {
       title: 'Goose Database',
+      layout: 'main'
+   })
+});
+
+app.get('/recipe', function (req, res, next) {
+   var testRecipe = require('./testRecipe');
+   var recipeInfo = testRecipe.recipe;
+   var ingredients = testRecipe.ingredients;
+   var instructions = testRecipe.instructions;
+   res.status(200).render('recipe', {
+      title: recipeInfo.title,
+      recipe: recipeInfo,
+      ingredient: ingredients,
+      instruction: instructions,
       layout: 'main'
    })
 });

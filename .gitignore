@@ -1,7 +1,11 @@
 node_modules
+package-lock.json
 
 # password file
 config.js
+
+# API Keys
+krogerAPICreds.js
 
 # server environment variables file
 ecosystem.config.js
