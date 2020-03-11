@@ -9,19 +9,26 @@ from selenium.common.exceptions import TimeoutException
 from itertools import repeat
 from multiprocessing import Pool, cpu_count, Manager
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(150000)
 
 
 f = open("recipes.txt", "r")
 
 
 def getAuthor(soup):
-    try:
-        job_elem = soup.find_all("", {"class": "chef__image-link"})
-        return job_elem[0]["title"]
-    except:
-        return "none"
+    print('getting author')
+    job_elem = soup.find_all("", {"class": "recipe-details__author-link theme-color"})
+    print(job_elem[0].contents[0])
 
+def getTitle(soup):
+    job_elem = soup.find_all("", {"class": "recipe-title"})
+    elem = soup.find('h1')
+    print(elem.contents)
+    return ""
+
+
+def getIngredients(soup):
+    return "none"
 
 def getYield(soup):
     try:
@@ -30,6 +37,8 @@ def getYield(soup):
     except:
         return "none"
 
+def getTotal_time(soup):
+    return "none"
 
 def getPrep(soup):
     try:
@@ -39,10 +48,11 @@ def getPrep(soup):
         return "none"
 
 
-def strip(instructions):
-    inst = instructions.split(".")
-    inst.pop()
-    return inst
+def strip(soup):
+    return "none"
+    #inst = instructions.split(".")
+    #inst.pop()
+    #return inst
 
 
 def scrape(index, total_processes, outList, recipes):
@@ -66,27 +76,30 @@ def scrape(index, total_processes, outList, recipes):
             fileout = open("recipeJson" + str(fileNum) + ".json", "a")
             i = 0
         jsonOut = {}
-        scraper = scrape_me(recipe.rstrip())
+        #scraper = scrape_me(recipe.rstrip())
         options = webdriver.ChromeOptions()
-        options.add_argument("headless")
+        #options.add_argument("headless")
         driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome()
-        driver.set_page_load_timeout(10)
+        print("about to go parse")
+        driver.set_page_load_timeout(20)
         try:
             driver.get(recipe.rstrip())
+            print("after driver")
             soup = BeautifulSoup(driver.page_source, "html.parser")
-
+            print("about to get author")
             jsonOut["author"] = getAuthor(soup)
-            jsonOut["title"] = scraper.title()
-            jsonOut["ingredients"] = scraper.ingredients()
-            jsonOut["yield"] = scraper.yields()
-            jsonOut["cook_time"] = scraper.total_time()
+            jsonOut["title"] = getTitle(soup)
+            jsonOut["ingredients"] = getIngredients(soup)
+            jsonOut["yield"] = getYields(soup)
+            jsonOut["cook_time"] = getTotal_time(soup)
             jsonOut["prep_time"] = getPrep(soup)
-            jsonOut["directions"] = strip(scraper.instructions())
+            jsonOut["directions"] = strip(soup)
             jsonOut["url"] = recipe.rstrip()
-            jsonOut["source"] = "bbc.co.uk"
+            jsonOut["source"] = "food.com"
             driver.quit()
-
+            print(jsonOut)
+            break
             # add data to the output list data structure
             outList.append(jsonOut)
         except TimeoutException:
