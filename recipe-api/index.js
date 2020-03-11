@@ -94,7 +94,7 @@ const createOrInsertMeasurement = async measurement => {
     execute(selectAbbreviation, [measurement])
   ]);
   if (measurementResults.length == 0 && abbreviationResults.length == 0) {
-    const insertMeasurement = `INSERT INTO measurement (unit, category, base_size) VALUES (?, ?, ?)`;
+    const insertMeasurement = `INSERT IGNORE INTO measurement (unit, category, base_size) VALUES (?, ?, ?)`;
     const results = await execute(insertMeasurement, [measurement, null, 0]);
     return results.insertId;
   } else if (measurementResults.length == 1) {
@@ -118,7 +118,7 @@ const createOrInsertIngredient = async (ingredient, recipeId, index) => {
   const [results] = await execute(selectIngredient, [name]);
 
   if (results.length == 0) {
-    const insertIngredient = `INSERT INTO ingredient (name) VALUES (?)`;
+    const insertIngredient = `INSERT IGNORE INTO ingredient (name) VALUES (?)`;
     const result = await execute(insertIngredient, [name]);
     id = result.insertId;
   } else {
@@ -188,8 +188,10 @@ const submitRecipe = async recipe => {
     authorId,
     recipe["url"],
     recipe["title"],
-    recipe["cook_time"] == "none" ? 0 : recipe["cook_time"],
-    recipe["prep_time"] == "none" ? 0 : recipe["prep_time"]
+    0,
+    0
+    // recipe["cook_time"] == "none" ? 0 : recipe["cook_time"],
+    // recipe["prep_time"] == "none" ? 0 : recipe["prep_time"]
   ];
   const [results] = await execute(insertRecipe, params);
   const { insertId } = results;
@@ -214,7 +216,8 @@ app.post("/recipes", async (req, res, next) => {
     req.log.info({
       num_error: errors.length,
       num_total: results.length,
-      errors: errors
+      errors: errors,
+      results: results
     });
     res.send({ errorRecipes: errors });
   } catch (e) {
