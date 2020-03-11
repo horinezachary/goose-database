@@ -11,3 +11,5 @@ krogerAPICreds.js
 ecosystem.config.js
 
 .env
+
+newrelic_agent.log

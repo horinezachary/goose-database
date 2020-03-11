@@ -1,3 +1,5 @@
+require("newrelic");
+
 const axios = require("axios");
 const express = require("express");
 const math = require("mathjs");
