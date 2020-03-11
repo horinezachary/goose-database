@@ -45,4 +45,4 @@ sed -i '1d' recipes.txt
 
 echo "scraping sites this may take a while"
 
-# python3 scraperBbc.py
+python3 scraperFN.py

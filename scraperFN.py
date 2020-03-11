@@ -9,7 +9,7 @@ from selenium.common.exceptions import TimeoutException
 from itertools import repeat
 from multiprocessing import Pool, cpu_count, Manager
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(150000)
 
 
 f = open("recipes.txt", "r")
@@ -70,7 +70,7 @@ def scrape(index, total_processes, outList, recipes):
         options.add_argument("headless")
         driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome()
-        driver.set_page_load_timeout(10)
+        driver.set_page_load_timeout(1)
         try:
             driver.get(recipe.rstrip())
         except TimeoutException:

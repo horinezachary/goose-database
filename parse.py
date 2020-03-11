@@ -15,7 +15,7 @@ while i:
     if i == 2:
         break
 
-    finalurl = url
+    finalurl = sys.argv[1]
 
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
