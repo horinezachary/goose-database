@@ -16,29 +16,46 @@ f = open("recipes.txt", "r")
 
 
 def getAuthor(soup):
-    print('getting author')
-    job_elem = soup.find_all("", {"class": "recipe-details__author-link theme-color"})
-    print(job_elem[0].contents[0])
+    try:
+        job_elem = soup.find_all("", {"class": "recipe-details__author-link theme-color"})
+        return job_elem[0].contents[0]
+    except:
+        return "none"
 
 def getTitle(soup):
-    job_elem = soup.find_all("", {"class": "recipe-title"})
-    elem = soup.find('h1')
-    print(elem.contents)
-    return ""
+    try:
+        job_elem = soup.find_all("", {"class": "recipe-title"})
+        elem = soup.find('h1')
+        return elem.contents[0]
+    except:
+        return "none"
 
 
 def getIngredients(soup):
-    return "none"
+    try:
+        job_elem = soup.find_all("li", {"class": "recipe-ingredients__item"})
+        string = []
+        for elem in job_elem:
+            string.append(elem.getText())
+        return string
+    except:
+        return "none"
 
 def getYield(soup):
     try:
-        job_elem = soup.find_all("", {"class": "yield"})
-        return job_elem[1].contents[0]
+        job_elem = soup.find("", {"class": "recipe-facts__yield"})
+        elems = job_elem.findChildren("a", recursive=False)
+        return (str(elems[0].contents[0].contents[0]) + " "
+                + str(elems[0].contents[2].contents[0])) 
     except:
         return "none"
 
 def getTotal_time(soup):
-    return "none"
+    try:
+        job_elem = soup.find("", {"class": "recipe-facts__time"})
+        return job_elem.contents[2].contents[0]
+    except:
+        return "none"
 
 def getPrep(soup):
     try:
@@ -49,11 +66,14 @@ def getPrep(soup):
 
 
 def strip(soup):
-    return "none"
-    #inst = instructions.split(".")
-    #inst.pop()
-    #return inst
-
+    try:
+        job_elem = soup.find_all("li", {"class": "recipe-directions__step"})
+        string = []
+        for elem in job_elem:
+            string.append(elem.getText())
+        return string
+    except:
+        return "none"
 
 def scrape(index, total_processes, outList, recipes):
     fileNum = 0
@@ -78,26 +98,26 @@ def scrape(index, total_processes, outList, recipes):
         jsonOut = {}
         #scraper = scrape_me(recipe.rstrip())
         options = webdriver.ChromeOptions()
-        #options.add_argument("headless")
+        options.add_argument("headless")
         driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome()
-        print("about to go parse")
+        print("about to go parse " +  recipe)
         driver.set_page_load_timeout(20)
         try:
             driver.get(recipe.rstrip())
             print("after driver")
             soup = BeautifulSoup(driver.page_source, "html.parser")
+            driver.quit()
             print("about to get author")
             jsonOut["author"] = getAuthor(soup)
             jsonOut["title"] = getTitle(soup)
             jsonOut["ingredients"] = getIngredients(soup)
-            jsonOut["yield"] = getYields(soup)
+            jsonOut["yield"] = getYield(soup)
             jsonOut["cook_time"] = getTotal_time(soup)
             jsonOut["prep_time"] = getPrep(soup)
             jsonOut["directions"] = strip(soup)
             jsonOut["url"] = recipe.rstrip()
             jsonOut["source"] = "food.com"
-            driver.quit()
             print(jsonOut)
             break
             # add data to the output list data structure

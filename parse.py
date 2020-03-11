@@ -5,12 +5,14 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 
-url = 'https://www.food.com/recipe?ref=nav'
-pageadd='&pn=3'
+url = str(sys.argv[1]) #'https://www.food.com/recipe?ref=nav'
+print(url)
+pageadd='&pn='
 f = open("recipes.txt", "a")
 i = 1
 while i:
-
+    if i == 2000:
+        break
     if i == 1:
         finalurl=url
     else:
@@ -18,7 +20,7 @@ while i:
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     driver = webdriver.Chrome(chrome_options=options)
-    driver.set_page_load_timeout(2)
+    driver.set_page_load_timeout(5)
     try:
         driver.get(finalurl)
     except TimeoutException:
