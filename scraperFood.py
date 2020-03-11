@@ -88,42 +88,40 @@ def scrape(index, total_processes, outList, recipes):
     if index == total_processes - 1 and len(recipes) >= maxIndex - 1:
         localRecipes += recipes[maxIndex:]
 
-    for recipe in localRecipes:
-        if i > 50:
-            fileout.write("]")
-            fileout.close()
-            fileNum += 1
-            fileout = open("recipeJson" + str(fileNum) + ".json", "a")
-            i = 0
+    data = []
+    for i, recipe in enumerate(localRecipes):
+        if (i % 100) == 0:
+            with open("outRecipes_" + str(index) + "_" + str(i) + ".json", "w+") as f:
+                json.dump({"data": data}, f)
+            data = []
         jsonOut = {}
-        #scraper = scrape_me(recipe.rstrip())
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
         driver = webdriver.Chrome(options=options)
-        # driver = webdriver.Chrome()
-        print("about to go parse " +  recipe)
-        driver.set_page_load_timeout(20)
+        driver.set_page_load_timeout(5)
         try:
             driver.get(recipe.rstrip())
-            print("after driver")
-            soup = BeautifulSoup(driver.page_source, "html.parser")
-            driver.quit()
-            print("about to get author")
-            jsonOut["author"] = getAuthor(soup)
-            jsonOut["title"] = getTitle(soup)
-            jsonOut["ingredients"] = getIngredients(soup)
-            jsonOut["yield"] = getYield(soup)
-            jsonOut["cook_time"] = getTotal_time(soup)
-            jsonOut["prep_time"] = getPrep(soup)
-            jsonOut["directions"] = strip(soup)
-            jsonOut["url"] = recipe.rstrip()
-            jsonOut["source"] = "food.com"
-            print(jsonOut)
-            break
-            # add data to the output list data structure
-            outList.append(jsonOut)
         except TimeoutException:
-            print(f"time out parsing url {recipe}")
+            driver.execute_script("window.stop();")
+
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        driver.quit()
+        #print("about to get author")
+        jsonOut["author"] = getAuthor(soup)
+        jsonOut["title"] = getTitle(soup)
+        jsonOut["ingredients"] = getIngredients(soup)
+        jsonOut["yield"] = getYield(soup)
+        jsonOut["cook_time"] = getTotal_time(soup)
+        jsonOut["prep_time"] = getPrep(soup)
+        jsonOut["directions"] = strip(soup)
+        jsonOut["url"] = recipe.rstrip()
+        jsonOut["source"] = "food.com"
+        data.append(jsonOut)
+        # add data to the output list data structure
+        print(jsonOut)
+    with open("outRecipes_" + str(index) + "_" + str(i) + ".json", "w+") as f:
+        json.dump({"data": data}, f)
+    data = []
 
 
 if __name__ == "__main__":
