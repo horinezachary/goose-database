@@ -41,6 +41,13 @@ app.get('/recipe', function (req, res, next) {
    })
 });
 
+app.get('/replcator',function (req,res,next){
+   res.status(200).render('./replcator/rep.handlebars', {
+      title: 'replcator',
+      layout: 'main'
+   });
+});
+
 app.get('/recipe/:r', function (req, res, next) {
    var recipe = req.params.r;
    con.query(`SELECT * FROM recipe WHERE id = ${recipe}`, function (err, recipe) {
