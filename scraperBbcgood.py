@@ -15,11 +15,17 @@ f = open("recipes.txt", "r")
 
 def getAuthor(soup):
     try:
-        job_elem = soup.find_all("", {"class": "submitter__name"})
-        return job_elem[0].contents[0]
+        job_elem = soup.find("", {"class": "author"})
+        return job_elem.getText()
     except:
         return "none"
 
+def getPrep(soup):
+    try:
+        job_elem = soup.find("", {"class": "recipe-details__cooking-time-prep"})
+        return job_elem.getText()
+    except:
+        return "none"
 
 def getYield(soup):
     try:
@@ -57,25 +63,26 @@ def scrape(index, total_processes, recipes):
         options.add_argument("headless")
         driver = webdriver.Chrome(options=options)
         # driver = webdriver.Chrome()
-        driver.set_page_load_timeout(10)
+        driver.set_page_load_timeout(5)
         try:
             driver.get(recipe.rstrip())
-            soup = BeautifulSoup(driver.page_source, "html.parser")
-
-            jsonOut["author"] = getAuthor(soup)
-            jsonOut["title"] = scraper.title()
-            jsonOut["ingredients"] = scraper.ingredients()
-            #      jsonOut["time"] = getTime(driver, soup)
-            jsonOut["yield"] = scraper.yields()
-            jsonOut["cook_time"] = scraper.total_time()
-            jsonOut["prep_time"] = "none"
-            jsonOut["directions"] = strip(scraper.instructions())
-            jsonOut["url"] = recipe.rstrip()
-            jsonOut["source"] = "allrecipes.com"
-            driver.quit()
-            data.append(jsonOut)
         except TimeoutException:
-            print("time out on " + recipe)
+            driver.execute_script("window.stop();")
+       
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        driver.quit()
+            
+        jsonOut["author"] = getAuthor(soup)
+        jsonOut["title"] = scraper.title()
+        jsonOut["ingredients"] = scraper.ingredients()
+        #      jsonOut["time"] = getTime(driver, soup)
+        jsonOut["yield"] = scraper.yields()
+        jsonOut["cook_time"] = scraper.total_time()
+        jsonOut["prep_time"] = getPrep(soup)
+        jsonOut["directions"] = strip(scraper.instructions())
+        jsonOut["url"] = recipe.rstrip()
+        jsonOut["source"] = "bbcgoodfood.com"
+        data.append(jsonOut)
     with open("outRecipes_" + str(index) + "_" + str(i) + ".json", "w+") as f:
         json.dump({"data": data}, f)
     data = []

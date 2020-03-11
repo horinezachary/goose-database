@@ -4,19 +4,16 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 
-holdurl = "https://www.allrecipes.com"
 
-url = "https://www.allrecipes.com/recipes/94/soups-stews-and-chili/?internalSource=top%20hubs&referringContentType=Homepage"
-pageadd = "&page="
+url = "https://www.bbcgoodfood.com/search/recipes?query="
+pageadd = "#page="
+holdurl='https://www.bbcgoodfood.com'
 f = open("recipes.txt", "a")
-i = 2
+i = 1
 while i:
-    if i == 500:
+    if i == 869:
         break
-    if i != 1:
-        finalurl = url + pageadd + str(i)
-    else:
-        finalurl = url
+    finalurl = url + pageadd + str(i)
 
     options = webdriver.ChromeOptions()
     options.add_argument("headless")
@@ -28,12 +25,11 @@ while i:
         driver.execute_script("window.stop();")
     soup = BeautifulSoup(driver.page_source, "html.parser")
     driver.quit()
-    job_elems = soup.find_all("", {"class": "fixed-recipe-card"})
+    job_elems = soup.find_all("", {"class": "teaser-item__title"})
     for job_elem in job_elems:
-        ref = job_elem.find("", {"class": "grid-card-image-container"})
-        final = ref.find("a")
-        print(final["href"])
+        final = job_elem.find("a")
+        #print(holdurl+final["href"])
         f.write("\n")
-        f.write(final["href"])
+        f.write(holdurl+final["href"])
     i += 1
 f.close()
