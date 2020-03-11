@@ -204,12 +204,16 @@ app.post("/recipes", async (req, res, next) => {
     const results = await Promise.allSettled(
       data.map(recipe => submitRecipe(recipe))
     );
-    console.log(results);
     const errors = results
       .map((result, index) =>
         result.status == "rejected" ? data[index] : null
       )
       .filter(result => result != null);
+    req.log.info({
+      num_error: errors.length,
+      num_total: results.length,
+      errors: errors
+    });
     res.send({ errorRecipes: errors });
   } catch (e) {
     req.log.error(e);
