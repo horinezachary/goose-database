@@ -27,20 +27,6 @@ app.get('/', function (req, res, next) {
    })
 });
 
-app.get('/recipe', function (req, res, next) {
-   var testRecipe = require('./testRecipe');
-   var recipeInfo = testRecipe.recipe;
-   var ingredients = testRecipe.ingredients;
-   var instructions = testRecipe.instructions;
-   res.status(200).render('recipe', {
-      title: recipeInfo.title,
-      recipe: recipeInfo,
-      ingredient: ingredients,
-      instruction: instructions,
-      layout: 'main'
-   })
-});
-
 app.get('/replicator',async function (req,res,next){
    // Set up our vars
    var ingredients = []
