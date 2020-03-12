@@ -188,10 +188,8 @@ const submitRecipe = async recipe => {
     authorId,
     recipe["url"],
     recipe["title"],
-    0,
-    0
-    // recipe["cook_time"] == "none" ? 0 : recipe["cook_time"],
-    // recipe["prep_time"] == "none" ? 0 : recipe["prep_time"]
+    recipe["cook_time"] == "none" ? 0 : recipe["cook_time"],
+    recipe["prep_time"] == "none" ? 0 : recipe["prep_time"]
   ];
   const [results] = await execute(insertRecipe, params);
   const { insertId } = results;
