@@ -118,6 +118,32 @@ app.get('/ingredient/:i', function (req, res, next) {
    });
 });
 
+app.get('/author/:a', function (req, res, next) {
+   var filler1 = false;
+   var filler2 = false;
+   var authorId = req.params.a;
+   con.query(`SELECT * FROM author NATURAL JOIN site WHERE author_id = ${authorId}`, function (err, author) {
+      con.query(`SELECT DISTINCT * FROM recipe NATURAL JOIN author NATURAL JOIN site WHERE author_id = ${authorId} GROUP BY title`, function (err, recipes) {
+         if (recipes != null) {
+            if (recipes.length%3>0) {
+               filler1 = true;
+            }
+            if (3-recipes.length%3>1) {
+               filler2 = true;
+            }
+         }
+         res.status(200).render('author', {
+            title: author[0].author_name,
+            author: author[0],
+            recipes: recipes,
+            filler1: filler1,
+            filler2: filler2,
+            layout: 'main'
+         });
+      });
+   });
+});
+
 //recipe,ingredient and author are boolean variables used to set the active state
 function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
    var filler1 = false;

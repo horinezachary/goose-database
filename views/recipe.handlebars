@@ -1,7 +1,7 @@
 <div class="card list" style="width:95%; max-width:60rem;">
    <div class="card-body recipe-header">
          <h1 class="recipe-title">{{recipe.title}}</h1>
-         <h6 class="recipe-author">{{recipe.author_name}}{{#if recipe.date}} - {{recipe.date}}{{/if}}</h6>
+         <h6 class="recipe-author"><a href="/author/{{recipe.author_id}}">{{recipe.author_name}}</a>{{#if recipe.date}} - {{recipe.date}}{{/if}}</h6>
          <div class="recipe-info text-center">
             <h6 class="flex-fill">Prep Time: {{recipe.prep_time}}</h6>
             <h6 class="flex-fill">Cook Time: {{recipe.cook_time}}</h6>

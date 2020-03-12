@@ -1,0 +1,24 @@
+<div class="card list" style="width:95%; max-width:60rem;">
+   <div class="card-body recipe-header">
+         <h1 class="recipe-title">{{author.author_name}}</h1>
+         <h6 class="flex-fill">Site: <a href="https://{{author.site_title}}">{{author.site_title}}</a></h6>
+         <div class="recipe-info text-center">
+         </div>
+   </div>
+   <h3 class="section-header">Info</h3>
+   <ul class="list-group list-group-flush recipe-body">
+
+   </ul>
+</div>
+
+<div class="search-item-container">
+   {{#each recipes}}
+      {{> recipeSearchElement}}
+   {{/each}}
+   {{#if filler1}}
+      <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
+   {{/if}}
+   {{#if filler2}}
+      <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
+   {{/if}}
+</div>
