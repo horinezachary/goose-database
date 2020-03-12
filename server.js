@@ -41,6 +41,51 @@ app.get('/recipe', function (req, res, next) {
    })
 });
 
+app.get('/replicator',async function (req,res,next){
+   // Set up our vars
+   var ingredients = []
+   var recipeName = ['Ares IV Special','USS Billings Special', 'Columbus Special', 'Copernicus Special', 'USS Dauntless Special', 'USS Defiant Special', 'USS Enterprise Special', 'Fesarius Special', 'Galileo Special', 'Gomtuu Special', 'USS Okinawa Special', 'USS Raven Special', 'SS Beagle Special', 'USS Franklin Special', 'USS Voyager Special']
+   
+   // Name our 'recipe'
+   recipeName = recipeName[Math.floor(Math.random() * recipeName.length - 1)];
+   
+   // Grab all the food catagories
+   var food_category = await con.asyncQuery(`SELECT id FROM food_category`,[]);
+   food_category = food_category[0];
+
+   // Grab a random number of ingredients
+   var num_ingredients = Math.floor(Math.random() * 7) + 4;// Min 3 Ingredients, Max 10
+
+   // For every ingredient pick a category
+   for (let i = 0; i < num_ingredients; i++) {
+      var ingredient = Math.floor(Math.random() * food_category.length - 1);
+      var choices = await con.asyncQuery(`SELECT description FROM food WHERE food_category_id = ${ingredient}`,[]);
+      choices = choices[0];
+      var choice = choices[Math.floor(Math.random() * choices.length - 1)]
+      if(choice){// In case we get a NULL entry
+         ingredients.push({text: choice.description});
+      }
+      else{// Try again
+         i--;
+      }
+   }
+
+   // Create some instructions
+   var instructions = [{step: 1,text: 'Put ingredients into the replicator'},{step: 2,text: 'Select \'food\''},{step: 3,text: `Input ${recipeName}`},{step: 4,text: 'Enjoy!'}];
+
+   // Finalize the recipe
+   var recipe = {title: recipeName,author: 'GooseDB',date: 'Today',preptime: 'None',cooktime: '6 seconds',servings: '1',sourceLink: '/replicator', source: 'Here!'}
+
+   // Render the recipe
+   res.status(200).render('recipe', {
+      title: recipeName,
+      recipe: recipe,
+      layout: 'main',
+      ingredient: ingredients,
+      instruction: instructions
+   });
+});
+
 app.get('/recipe/:r', function (req, res, next) {
    var recipe = req.params.r;
    con.query(`SELECT * FROM recipe WHERE id = ${recipe}`, function (err, recipe) {
