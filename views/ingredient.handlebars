@@ -1,0 +1,17 @@
+<div class="card list" style="width:95%; max-width:60rem;">
+   <div class="card-body recipe-header">
+         <h1 class="recipe-title">{{ingredient.name}}</h1>
+         <div class="recipe-info text-center">
+         </div>
+   </div>
+   <h3 class="section-header">Info</h3>
+
+   <h3 class="section-header">Used In:</h3>
+   <ul class="list-group list-group-flush recipe-body">
+      {{#each uses}}
+         <li class="list-group-item recipe-instruction">
+            <p><a href="/recipe/{{recipe_id}}">{{title}}</p>
+         </li>
+      {{/each}}
+   </ul>
+</div>

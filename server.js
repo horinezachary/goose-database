@@ -103,6 +103,21 @@ app.get('/recipe/:r', function (req, res, next) {
    });
 });
 
+app.get('/ingredient/:i', function (req, res, next) {
+   var ingredientId = req.params.i;
+   con.query(`SELECT * FROM ingredient WHERE ingredient_id = ${ingredientId}`, function (err, ingredient) {
+      con.query(`SELECT DISTINCT recipe_id, recipe.title FROM ingredient_row NATURAL JOIN ingredient NATURAL JOIN recipe WHERE ingredient_id = ${ingredientId} LIMIT 10`, function (err, recipes) {
+         console.log(ingredient[0]);
+         res.status(200).render('ingredient', {
+            title: ingredient[0].name,
+            ingredient: ingredient[0],
+            uses: recipes,
+            layout: 'main'
+         });
+      });
+   });
+});
+
 //recipe,ingredient and author are boolean variables used to set the active state
 function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
    var filler1 = false;

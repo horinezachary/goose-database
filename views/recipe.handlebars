@@ -14,7 +14,7 @@
 
       {{#each ingredient}}
          <li class="list-group-item recipe-ingredient">
-            <p>{{size}} {{unit}} {{name}}</p>
+            <p>{{size}} {{unit}} <a href="/ingredient/{{ingredient_id}}">{{name}}</p>
          </li>
       {{/each}}
    </ul>
