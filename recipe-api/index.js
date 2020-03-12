@@ -95,7 +95,7 @@ const createOrInsertMeasurement = async measurement => {
   ]);
   if (measurementResults.length == 0 && abbreviationResults.length == 0) {
     const insertMeasurement = `INSERT IGNORE INTO measurement (unit, category, base_size) VALUES (?, ?, ?)`;
-    const results = await execute(insertMeasurement, [measurement, null, 0]);
+    const results = await execute(insertMeasurement, [measurement, "unit", 0]);
     return results.insertId;
   } else if (measurementResults.length == 1) {
     return measurementResults[0].measurement_id;
