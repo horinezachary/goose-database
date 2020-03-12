@@ -42,13 +42,13 @@ app.get('/recipe', function (req, res, next) {
 });
 
 app.get('/recipe/:r', function (req, res, next) {
-   var recipe = req.params.r;
-   con.query(`SELECT * FROM recipe WHERE id = ${recipe}`, function (err, recipe) {
-      con.query(`SELECT * FROM ingredient_row WHERE recipe = ${recipe} ORDER BY list_order`, function (err, ingredients) {
-         con.query(`SELECT * FROM instruction WHERE recipe = ${recipe} ORDER BY step`, function (err, instructions) {
+   var recipeId = req.params.r;
+   con.query(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site WHERE recipe_id = ${recipeId}`, function (err, recipe) {
+      con.query(`SELECT * FROM ingredient_row NATURAL JOIN ingredient NATURAL JOIN measurement WHERE recipe_id = ${recipeId} ORDER BY list_order`, function (err, ingredients) {
+         con.query(`SELECT * FROM instruction WHERE recipe_id = ${recipeId} ORDER BY step`, function (err, instructions) {
             res.status(200).render('recipe', {
-               title: recipe.title,
-               recipe: recipe,
+               title: recipe[0].title,
+               recipe: recipe[0],
                ingredient: ingredients,
                instruction: instructions,
                layout: 'main'
