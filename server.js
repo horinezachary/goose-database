@@ -2,11 +2,8 @@ var mysql = require('mysql');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
 var con = require('./sqlConfig');
-var configUSDA = require('./usdaconfig')[env];
-var conUSDA = require('./sqlConfig');
 
 con.start(config.database);
-conUSDA.start(configUSDA.database);
 
 var path = require('path');
 var express = require('express');
@@ -53,7 +50,7 @@ app.get('/replicator',async function (req,res,next){
    recipeName = recipeName[Math.floor(Math.random() * recipeName.length - 1)];
    
    // Grab all the food catagories
-   var food_category = await conUSDA.asyncQuery(`SELECT id FROM food_category`,[]);
+   var food_category = await con.asyncQuery(`SELECT id FROM food_category`,[]);
    food_category = food_category[0];
 
    // Grab a random number of ingredients
@@ -62,7 +59,7 @@ app.get('/replicator',async function (req,res,next){
    // For every ingredient pick a category
    for (let i = 0; i < num_ingredients; i++) {
       var ingredient = Math.floor(Math.random() * food_category.length - 1);
-      var choices = await conUSDA.asyncQuery(`SELECT description FROM food WHERE food_category_id = ${ingredient}`,[]);
+      var choices = await con.asyncQuery(`SELECT description FROM food WHERE food_category_id = ${ingredient}`,[]);
       choices = choices[0];
       var choice = choices[Math.floor(Math.random() * choices.length - 1)]
       if(choice){// In case we get a NULL entry
