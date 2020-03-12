@@ -90,19 +90,20 @@ app.get('/search', function (req, res, next) {
       searchDomain = "recipe";
    }
    if (searchDomain == 'recipe' || searchDomain == '') {
-      //con.query(`SELECT * FROM (SELECT * FROM recipe WHERE title LIKE '${searchQuery.toString()}') AS S NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
-      con.query(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
+      console.log(searchQuery);
+      con.query(`SELECT DISTINCT * FROM (SELECT * FROM recipe WHERE title LIKE '%${searchQuery.toString()}%') AS S NATURAL JOIN author NATURAL JOIN site GROUP BY title`, function(err, results) {
+      //con.query(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site`, function(err, results) {
          console.log(results);
          renderSearch(searchQuery,true,false,false, results, res);
       });
    } else if (searchDomain == 'ingredient') {
-      con.query(`SELECT * FROM ingredient WHERE name LIKE "${searchQuery.toString()}" `, function(err, results) {
+      con.query(`SELECT DISTINCT * FROM ingredient WHERE name LIKE '%${searchQuery.toString()}% GROUP BY title' `, function(err, results) {
          console.log(results);
          renderSearch(searchQuery,false,true,false, results, res);
       });
    } else if (searchDomain == 'author') {
-      //con.query(`SELECT * FROM author WHERE author_name LIKE "${searchQuery.toString()}" `, function(err, results) {
-      con.query(`SELECT * FROM author NATURAL JOIN site`, function(err, results) {
+      con.query(`SELECT DISTINCT * FROM author WHERE author_name LIKE '%${searchQuery.toString()}% GROUP BY title' `, function(err, results) {
+      //con.query(`SELECT * FROM author NATURAL JOIN site`, function(err, results) {
          console.log(results);
          renderSearch(searchQuery,false,false,true, results, res);
       });
