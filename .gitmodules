@@ -1,0 +1,3 @@
+[submodule "ingredients-api"]
+	path = ingredients-api
+	url = git@github.com:jemisonf/ingredient-phrase-tagger.git
