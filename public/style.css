@@ -99,6 +99,124 @@ ul.recipe-body  {
    margin: 0 auto;
 }
 
+.search-bar {
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   margin: 5px;
+}
+
+.navbar-search {
+  float: right;
+  margin-right: 20px;
+  padding: 0;
+}
+
+.search-input {
+  padding: 4px;
+  font-size: 16px;
+  border: 1px solid #dadada;
+  border-radius: 6px 0px 0px 6px;
+}
+
+.search-bar .search-input {
+    flex-grow: 1;
+}
+
+.navbar-search-input {
+   width: 70px;
+   transition: width 1s;
+   background-color: #ddd;
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.navbar-search-input:focus {
+   width: 500px;
+   background-color: #fff;
+}
+
+.search-input:focus + .search-button {
+   background-color: #fff;
+   outline: none;
+}
+
+.search-button {
+  margin-left: -5px;
+  padding: 4px;
+  font-size: 16px;
+  border: 1px solid #dadada;
+  border-left-width: 0px;
+  border-radius: 0px 6px 6px 0px;
+  color: #343434;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.navbar-search-button {
+   background-color: #ddd;
+}
+
+.search-button:hover {
+  color: #196312;
+}
+
+.search-button:focus {
+  color: #196312;
+  outline: none;
+}
+
+.search-header {
+   padding-bottom: 0px;
+}
+
+.filter-options {
+   margin-left: 5px;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+}
+
+.filter-button {
+   margin-right: 5px;
+   border: none;
+   background: none;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   border-bottom: 4px solid #fff;
+}
+
+.filter-button:hover {
+   background-color: #eee;
+   border-bottom-color: #eee;
+   color: #196312;
+}
+
+.filter-button.active {
+   border-bottom: 4px solid #196312;
+}
+
+.search-item-container {
+   margin:auto;
+   max-width: 60rem;
+   width: 95%;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: wrap;
+}
+
+.search-item {
+   margin: 2px;
+   flex-grow:1;
+   flex-basis: 18rem;
+   max-width: 20rem;
+   margin-top: 1rem;
+
+}
+
+
 .green-gradient {
    background: -webkit-linear-gradient(50deg,#3ca832,#196312)!important;
    background: -o-linear-gradient(50deg,#3ca832,#196312)!important;

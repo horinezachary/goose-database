@@ -1,0 +1,38 @@
+<div class="card list text-center search-card" style="width:95%; max-width:60rem;">
+   <div class="card-body search-header">
+      <h4>Search</h4>
+      <div class="search-bar">
+         <input type="text" id="page-search-bar" class="search-input" value="{{searchQuery}}" placeholder="Search...">
+         <button type="button" id="page-search-button" class="search-button action-button"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="filter-options">
+         <button type="button" id="filter-recipe" class="filter-button{{#if recipeFocus}} active{{/if}}">Recipe</button>
+         <button type="button" id="filter-ingredient" class="filter-button{{#if ingredientFocus}} active{{/if}}">Ingredient</button>
+         <button type="button" id="filter-author" class="filter-button{{#if authorFocus}} active{{/if}}">Author</button>
+      </div>
+   </div>
+</div>
+
+<div class="search-item-container">
+   {{#if recipeFocus}}
+      {{#each results}}
+         {{> recipeSearchElement}}
+      {{/each}}
+   {{/if}}
+   {{#if ingredientFocus}}
+      {{#each results}}
+         {{> ingredientSearchElement}}
+      {{/each}}
+   {{/if}}
+   {{#if authorFocus}}
+      {{#each results}}
+         {{> authorSearchElement}}
+      {{/each}}
+   {{/if}}
+   {{#if filler1}}
+      <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
+   {{/if}}
+   {{#if filler2}}
+      <div class="card list text-center search-card search-item" style="visibility: hidden; width:95%; max-width:60rem;"></div>
+   {{/if}}
+</div>

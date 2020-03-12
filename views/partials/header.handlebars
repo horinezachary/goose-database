@@ -8,11 +8,22 @@
 
      <div class="collapse navbar-collapse" id="basicExampleNav">
         <ul class="navbar-nav mr-auto">
-           <li class="nav-item active">
+           <li class="nav-item{{#if home}} active{{/if}}">
              <a class="nav-link" href="/">Home
                <span class="sr-only">(current)</span>
              </a>
            </li>
+           <li class="nav-item{{#if replicator}} active{{/if}}">
+              <a class="nav-link" href="/replicator">Replicator Recipes
+               <span class="sr-only">(current)</span>
+             </a>
+           </li>
+         </ul>
+         <ul class="navbar-nav">
+            <li class="navitem navbar-search">
+               <input type="text" id="nav-search-bar" class="navbar-search-input search-input" value="{{searchQuery}}" placeholder="Search...">
+               <button type="button" id="nav-search-button" class="navbar-search-button search-button action-button"><i class="fas fa-search"></i></button>
+            </li>
          </ul>
       </div>
    </nav>
