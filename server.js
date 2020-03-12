@@ -45,10 +45,10 @@ app.get('/replicator',async function (req,res,next){
    // Set up our vars
    var ingredients = []
    var recipeName = ['Ares IV Special','USS Billings Special', 'Columbus Special', 'Copernicus Special', 'USS Dauntless Special', 'USS Defiant Special', 'USS Enterprise Special', 'Fesarius Special', 'Galileo Special', 'Gomtuu Special', 'USS Okinawa Special', 'USS Raven Special', 'SS Beagle Special', 'USS Franklin Special', 'USS Voyager Special']
-   
+
    // Name our 'recipe'
    recipeName = recipeName[Math.floor(Math.random() * recipeName.length - 1)];
-   
+
    // Grab all the food catagories
    var food_category = await con.asyncQuery(`SELECT id FROM food_category`,[]);
    food_category = food_category[0];
@@ -63,7 +63,7 @@ app.get('/replicator',async function (req,res,next){
       choices = choices[0];
       var choice = choices[Math.floor(Math.random() * choices.length - 1)]
       if(choice){// In case we get a NULL entry
-         ingredients.push({text: choice.description});
+         ingredients.push({name: choice.description});
       }
       else{// Try again
          i--;
@@ -74,7 +74,7 @@ app.get('/replicator',async function (req,res,next){
    var instructions = [{step: 1,text: 'Put ingredients into the replicator'},{step: 2,text: 'Select \'food\''},{step: 3,text: `Input ${recipeName}`},{step: 4,text: 'Enjoy!'}];
 
    // Finalize the recipe
-   var recipe = {title: recipeName,author: 'GooseDB',date: 'Today',preptime: 'None',cooktime: '6 seconds',servings: '1',sourceLink: '/replicator', source: 'Here!'}
+   var recipe = {title: recipeName,author_name: 'GooseDB',date: 'Today',prep_time: 'None',cook_time: '6 seconds',yield: '1',url: '/replicator', site_title: 'Here!'}
 
    // Render the recipe
    res.status(200).render('recipe', {
