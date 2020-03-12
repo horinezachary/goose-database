@@ -25,11 +25,11 @@ app.get('/', async function (req, res, next) {
    var recent = await con.asyncQuery(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site ORDER BY recipe_id DESC LIMIT 21`);
    var filler1 = false;
    var filler2 = false;
-   if (recent != null) {
-      if (recent.length%3>0) {
+   if (recent[0] != null) {
+      if (recent[0].length%3>0) {
          filler1 = true;
       }
-      if (3-recent.length%3>1) {
+      if (recent[0].length%3>1) {
          filler2 = true;
       }
    }
@@ -131,7 +131,7 @@ app.get('/author/:a', function (req, res, next) {
             if (recipes.length%3>0) {
                filler1 = true;
             }
-            if (3-recipes.length%3>1) {
+            if (recipes.length%3>1) {
                filler2 = true;
             }
          }
@@ -155,7 +155,7 @@ function renderSearch(searchQuery,recipe,ingredient,author, results, res) {
       if (results.length%3>0) {
          filler1 = true;
       }
-      if (3-results.length%3>1) {
+      if (results.length%3>1) {
          filler2 = true;
       }
    }
