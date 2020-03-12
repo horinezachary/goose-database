@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config')[env];
 var con = require('./sqlConfig');
+const sequelize = new Sequelize('USDA', 'richj', 'R90W4GtvwH6A990x', {host: 'pma2.horine.dev',dialect: 'mariadb'});
 
 con.start(config.database);
 
@@ -41,7 +42,21 @@ app.get('/recipe', function (req, res, next) {
    })
 });
 
-app.get('/replcator',function (req,res,next){
+var test = {
+   helpMe: []
+}
+
+//TODO:
+app.get('/replcator',async function (req,res,next){
+   // Grab our ingredients catagories
+   var test;
+   conUSDA.query(`SELECT id FROM food_category`,function(err,rows){
+
+   });
+   console.log(test);
+
+
+
    res.status(200).render('./replcator/rep.handlebars', {
       title: 'replcator',
       layout: 'main'
