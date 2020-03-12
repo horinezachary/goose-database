@@ -35,6 +35,7 @@ app.get('/', async function (req, res, next) {
    }
    res.status(200).render('home', {
       title: 'Goose Database',
+      home: true,
       recipes: recent[0],
       filler1: filler1,
       filler2: filler2,
@@ -80,6 +81,7 @@ app.get('/replicator',async function (req,res,next){
    // Render the recipe
    res.status(200).render('recipe', {
       title: recipeName,
+      replicator:true,
       recipe: recipe,
       layout: 'main',
       ingredient: ingredients,

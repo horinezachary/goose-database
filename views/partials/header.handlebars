@@ -8,12 +8,12 @@
 
      <div class="collapse navbar-collapse" id="basicExampleNav">
         <ul class="navbar-nav mr-auto">
-           <li class="nav-item active">
+           <li class="nav-item{{#if home}} active{{/if}}">
              <a class="nav-link" href="/">Home
                <span class="sr-only">(current)</span>
              </a>
            </li>
-           <li>
+           <li class="nav-item{{#if replicator}} active{{/if}}">
               <a class="nav-link" href="/replicator">Replicator Recipes
                <span class="sr-only">(current)</span>
              </a>
