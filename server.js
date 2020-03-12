@@ -20,9 +20,24 @@ app.use('/:url', express.static('public'));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-app.get('/', function (req, res, next) {
+app.get('/', async function (req, res, next) {
+
+   var recent = await con.asyncQuery(`SELECT * FROM recipe NATURAL JOIN author NATURAL JOIN site ORDER BY recipe_id DESC LIMIT 21`);
+   var filler1 = false;
+   var filler2 = false;
+   if (recent != null) {
+      if (recent.length%3>0) {
+         filler1 = true;
+      }
+      if (3-recent.length%3>1) {
+         filler2 = true;
+      }
+   }
    res.status(200).render('home', {
       title: 'Goose Database',
+      recipes: recent[0],
+      filler1: filler1,
+      filler2: filler2,
       layout: 'main'
    })
 });
