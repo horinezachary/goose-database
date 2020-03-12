@@ -44,7 +44,6 @@ app.get('/recipe', function (req, res, next) {
    })
 });
 
-//TODO:
 app.get('/replicator',async function (req,res,next){
    // Set up our vars
    var ingredients = []
