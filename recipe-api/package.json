@@ -1,0 +1,23 @@
+{
+  "name": "recipe-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "express-pino-logger": "^4.0.0",
+    "mathjs": "^6.6.1",
+    "mysql": "^2.18.1",
+    "newrelic": "^6.4.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "prettier": "^1.19.1"
+  }
+}

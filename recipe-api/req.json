@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "author": "Fischer Jemison",
+      "title": "How to make an Express.js server",
+      "url": "https://google.com",
+      "source": "GOOSEDB",
+      "cook_time": "none",
+      "prep_time": 12,
+      "ingredients": ["1 computer", "node.js installed", "npm installed"],
+      "directions": ["install node", "install express.js", "make a server"]
+    }
+  ]
+}

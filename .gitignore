@@ -9,3 +9,7 @@ krogerAPICreds.js
 
 # server environment variables file
 ecosystem.config.js
+
+.env
+
+newrelic_agent.log
