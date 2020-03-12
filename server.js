@@ -183,12 +183,12 @@ app.get('/search', function (req, res, next) {
          renderSearch(searchQuery,true,false,false, results, res);
       });
    } else if (searchDomain == 'ingredient') {
-      con.query(`SELECT DISTINCT * FROM ingredient WHERE name LIKE '%${searchQuery.toString()}% GROUP BY title' `, function(err, results) {
+      con.query(`SELECT DISTINCT * FROM ingredient WHERE name LIKE '%${searchQuery.toString()}%' GROUP BY name`, function(err, results) {
          console.log(results);
          renderSearch(searchQuery,false,true,false, results, res);
       });
    } else if (searchDomain == 'author') {
-      con.query(`SELECT DISTINCT * FROM author WHERE author_name LIKE '%${searchQuery.toString()}% GROUP BY title' `, function(err, results) {
+      con.query(`SELECT DISTINCT * FROM (SELECT * FROM author WHERE author_name LIKE '%${searchQuery.toString()}%') AS S NATURAL JOIN site GROUP BY author_name`, function(err, results) {
       //con.query(`SELECT * FROM author NATURAL JOIN site`, function(err, results) {
          console.log(results);
          renderSearch(searchQuery,false,false,true, results, res);
