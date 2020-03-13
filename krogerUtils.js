@@ -16,8 +16,9 @@ function getToken(client_id, client_secret, callback) {
          scope: "product.compact"
       }
    }, function (err, httpResponse, body) {
-      if (callback) {
-         console.log(body);
+      if (body.startsWith('<')) {
+         callback({data:[]});
+      }else if (callback) {
          callback(JSON.parse(body));
       }
    });
@@ -54,8 +55,12 @@ function getQuery(bearerToken, domain, query, callback){
          "Authorization": "Bearer "+bearerToken
       }
    }, function (err, httpResponse, body) {
-      if (callback) {
-         callback(body);
+      if (body.startsWith('<')) {
+         callback({data:[]});
+      }else if (callback) {
+         console.log(query);
+         //console.log(body);
+         callback(JSON.parse(body));
       }
    });
 }
