@@ -37,3 +37,11 @@ password: "pass",
 database: "recipes"
 ```
 You can have multuple configurations in this file, and the application decides which one to use by looking at the `NODE_ENV` environment variable. If you haven't set this though, it defaults to `development`.
+
+## Recipe API Server
+
+See recipe-api/readme.md for details.
+
+## Ingredient Phrase Tagger API Server
+
+See https://github.com/jemisonf/ingredient-phrase-tagger for details.
