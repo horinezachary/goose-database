@@ -42,7 +42,6 @@ function parseOptions(options) {
 function listProducts(bearerToken, options, callback) {
    var domain = "products"
    var params = parseOptions(options);
-   console.log(params);
    getQuery(bearerToken, domain, params, callback);
 }
 
