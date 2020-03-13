@@ -17,6 +17,7 @@ function getToken(client_id, client_secret, callback) {
       }
    }, function (err, httpResponse, body) {
       if (callback) {
+         console.log(body);
          callback(JSON.parse(body));
       }
    });
@@ -56,6 +57,12 @@ function getQuery(bearerToken, domain, query, callback){
       if (callback) {
          callback(body);
       }
+   });
+}
+
+function test() {
+   getToken(client_id,client_secret,function(body) {
+      console.log(body.access_token);
    });
 }
 
