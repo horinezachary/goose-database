@@ -9,6 +9,7 @@ var client_secret = config.kroger.client_secret;
 con.start(config.database);
 kroger.getToken(client_id,client_secret, function(auth) {
    var token = auth.access_token;
+   console.log(token);
    parse(token);
 });
 async function parse(token) {
@@ -28,20 +29,22 @@ async function parse(token) {
             kroger.listProducts(token, {term:searchTerm,limit:1}, async function(body) {
                var b = body.data[0];
                if (b != undefined) {
+                  console.log(b.productId);
                   var image = "https://www.kroger.com/product/images/large/front/"+b.url;
                   var size = b.items[0].size;
                   await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES('${b.productId}','${b.brand}','${b.countryOrigin}','${b.description}','${image}','${size}','${b.temperature.indicator}',${b.temperature.heatSensitive})`);
-               }
+               } else {console.log(undefined);}
             });
          });
       } else {
          kroger.listProducts(token, {term:searchTerm,limit:1}, async function(body) {
             var b = body.data[0];
             if (b != undefined) {
+               console.log(b.productId);
                var image = "https://www.kroger.com/product/images/large/front/"+b.url;
                var size = b.items[0].size;
                await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES('${b.productId}','${b.brand}','${b.countryOrigin}','${b.description}','${image}','${size}','${b.temperature.indicator}',${b.temperature.heatSensitive})`);
-            }
+            } else {console.log(undefined);}
          });
       }
    }
