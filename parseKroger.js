@@ -25,26 +25,38 @@ async function parse(token) {
          kroger.getToken(client_id,client_secret, async function(auth) {
             lastTime = Date.now();
             token = auth.access_token;
-            console.log(token);
-            kroger.listProducts(token, {term:searchTerm,limit:1}, async function(body) {
+            console.log("token!");
+            kroger.listProducts(token, {term:searchTerm,limit:1}, async function(item,body) {
                var b = body.data[0];
                if (b != undefined) {
                   console.log(b.productId);
                   var image = "https://www.kroger.com/product/images/large/front/"+b.url;
                   var size = b.items[0].size;
-                  await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES('${b.productId}','${b.brand}','${b.countryOrigin}','${b.description}','${image}','${size}','${b.temperature.indicator}',${b.temperature.heatSensitive})`);
-               } else {console.log(undefined);}
+                  await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES(?,?,?,?,?,?,?,?,?)`,[b.productId,item,b.brand,b.countryOrigin,b.description,image,size,b.temperature.indicator,b.temperature.heatSensitive]);
+                  total++;
+                  console.log(total+"/"+res.length);
+               } else {
+                  console.log(undefined);
+                  total++;
+                  console.log(total+"/"+res.length);
+               }
             });
          });
       } else {
-         kroger.listProducts(token, {term:searchTerm,limit:1}, async function(body) {
+         kroger.listProducts(token, {term:searchTerm,limit:1}, async function(item,body) {
             var b = body.data[0];
             if (b != undefined) {
                console.log(b.productId);
                var image = "https://www.kroger.com/product/images/large/front/"+b.url;
                var size = b.items[0].size;
-               await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES('${b.productId}','${b.brand}','${b.countryOrigin}','${b.description}','${image}','${size}','${b.temperature.indicator}',${b.temperature.heatSensitive})`);
-            } else {console.log(undefined);}
+               await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES(?,?,?,?,?,?,?,?,?)`,[b.productId,item,b.brand,b.countryOrigin,b.description,image,size,b.temperature.indicator,b.temperature.heatSensitive]);
+               total++;
+               console.log(total+"/"+res.length);
+            } else {
+               console.log(undefined);
+               total++;
+               console.log(total+"/"+res.length);
+            }
          });
       }
    }
