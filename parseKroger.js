@@ -10,15 +10,20 @@ con.start(config.database);
 kroger.getToken(client_id,client_secret, function(auth) {
    var token = auth.access_token;
    console.log(token);
-   parse(token);
+   var count = 2001;
+   while(count <= 37100) {
+      parse(token,count,100);
+      count=count+100;
+   }
 });
-async function parse(token) {
+async function parse(token, start, limit) {
+   console.log(start);
+   var total = 0;
    var lastTime = Date.now();
    var tokenValidity = 1800;
-
-   const [result] = await con.asyncQuery(`SELECT name FROM ingredient LIMIT 25`);
+   const [result] = await con.asyncQuery(`SELECT * FROM ingredient WHERE ingredient_id >= ${start} AND ingredient_id <= ${start+limit}`);
    var res = result;
-   console.log(res);
+   console.log(res.length);
    for (var i = 0; i < res.length; i++) {
       var searchTerm = res[i].name;
       if (Date.now() > lastTime + tokenValidity - 100) {
