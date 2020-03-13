@@ -9,3 +9,11 @@ user: "user",
 password: "pass",
 database: "recipes"
 ```
+
+## Recipe API Server
+
+See recipe-api/readme.md for details.
+
+## Ingredient Phrase Tagger API Server
+
+See https://github.com/jemisonf/ingredient-phrase-tagger for details.
