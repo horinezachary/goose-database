@@ -1,8 +1,5 @@
 const request = require('request');
 
-var client_id = "testgoosedb-0320c9ba2866c9639580df69eb1389036930981407665617586";
-var client_secret = "xfaz6WL7Cati3qA9w2bNAx0wFWiHveHqFCgxPuQR";
-
 function getToken(client_id, client_secret, callback) {
    let key = new Buffer(client_id+":"+client_secret).toString('base64');
    request.post({
@@ -42,11 +39,11 @@ function parseOptions(options) {
 function listProducts(bearerToken, options, callback) {
    var domain = "products"
    var params = parseOptions(options);
-   getQuery(bearerToken, domain, params, callback);
+   getQuery(bearerToken, domain, options.term, params, callback);
 }
 
 
-function getQuery(bearerToken, domain, query, callback){
+function getQuery(bearerToken, domain, item, query, callback){
       request.get({
       url: "https://api.kroger.com/v1/"+domain+"?"+query,
       headers: {
@@ -54,12 +51,14 @@ function getQuery(bearerToken, domain, query, callback){
          "Authorization": "Bearer "+bearerToken
       }
    }, function (err, httpResponse, body) {
-      if (body.startsWith('<')) {
-         callback({data:[]});
-      }else if (callback) {
-         console.log(query);
-         //console.log(body);
-         callback(JSON.parse(body));
+      if (body) {
+         if (body.startsWith('<')) {
+            callback({data:[]});
+         }else if (callback) {
+            //console.log(query);
+            //console.log(body);
+            callback(item,JSON.parse(body));
+         }
       }
    });
 }
