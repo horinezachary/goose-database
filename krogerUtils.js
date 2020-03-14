@@ -47,6 +47,17 @@ function listProducts(bearerToken, options, callback) {
    getQuery(bearerToken, domain, options.term, params, callback);
 }
 
+function getProducts(bearerToken, productIdList, options, callback) {
+   var query = "filter.productId=";
+   for (var i = 0; i < productIdList.length; i++) {
+      var id = "0".repeat(13-productIdList[i].length)+productIdList[i];
+      query+=id+",";
+   }
+   params = parseOptions(options);
+   if(query.endsWith(",")) {query = query.substr(0,query.length-1);}
+   getQuery(bearerToken, "products", productIdList, query+"&"+params, callback);
+}
+
 function getLocation(bearerToken, options, callback) {
    var domain = "locations";
    var params = parseOptions(options);
@@ -84,6 +95,9 @@ function test() {
             console.log(body);
             console.log(body.data[0].items[0]);
          });
+         getProducts(body.access_token,["2502","2554","3029"],{locationId:"70100070"}, function(item,body) {
+            console.log(body);
+         })
    });
 
 }
@@ -96,5 +110,8 @@ module.exports = {
    },
    listProducts: function(token, options, callback) {
       return listProducts(token, options, callback);
+   },
+   getProducts: function(token, productIdList, options, callback) {
+      return getProducts(token, productIdList, options, callback);
    }
 }
