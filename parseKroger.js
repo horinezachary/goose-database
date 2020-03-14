@@ -58,7 +58,7 @@ async function parse(token, start, limit) {
    var total = 0;
    var lastTime = Date.now();
    var tokenValidity = 1800;
-   const [result] = await con.asyncQuery(`SELECT * FROM ingredient WHERE ingredient.name NOT IN (SELECT name FROM krogerFood) AND ingredient.name NOT IN (SELECT name FROM krogerUndef) AND ingredient_id >= ${start} AND ingredient_id <= ${start+limit}`);
+   const [result] = await con.asyncQuery(`SELECT name FROM ingredient WHERE ingredient.name NOT IN (SELECT name FROM krogerFood) AND ingredient.name NOT IN (SELECT name FROM krogerUndef) AND ingredient_id >= ${start} AND ingredient_id <= ${start+limit}`);
    var res = result;
    //console.log(res.length);
    for (var i = 0; i < res.length; i++) {
@@ -68,14 +68,15 @@ async function parse(token, start, limit) {
             lastTime = Date.now();
             token = auth.access_token;
             console.log("token!");
-            kroger.listProducts(token, {term:searchTerm,limit:1}, async function(item,body) {
+            kroger.listProducts(token, {term:searchTerm,locationId:"70100070",limit:1}, async function(item,body) {
                if (body != undefined) {
                   var b = body.data[0];
                   if (b != undefined) {
                      console.log(b.productId);
                      var image = "https://www.kroger.com/product/images/large/front/"+b.url;
                      var size = b.items[0].size;
-                     await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES(?,?,?,?,?,?,?,?,?)`,[b.productId,item,b.brand,b.countryOrigin,b.description,image,size,b.temperature.indicator,b.temperature.heatSensitive]);
+                     var price = b.items[0].price.regular;
+                     await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES(?,?,?,?,?,?,?,?,?,?)`,[b.productId,item,b.brand,b.countryOrigin,b.description,image,price,size,b.temperature.indicator,b.temperature.heatSensitive]);
                      total++;
                      console.log(total+"/"+res.length);
                   } else {
@@ -88,14 +89,19 @@ async function parse(token, start, limit) {
             });
          });
       } else {
-         kroger.listProducts(token, {term:searchTerm,limit:1}, async function(item,body) {
+         kroger.listProducts(token, {term:searchTerm,locationId:"70100070",limit:1}, async function(item,body) {
             if (body != undefined) {
                var b = body.data[0];
                if (b != undefined) {
                   console.log(b.productId);
                   var image = "https://www.kroger.com/product/images/large/front/"+b.url;
                   var size = b.items[0].size;
-                  await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES(?,?,?,?,?,?,?,?,?)`,[b.productId,item,b.brand,b.countryOrigin,b.description,image,size,b.temperature.indicator,b.temperature.heatSensitive]);
+                  console.log(b.items[0].price);
+                  var price = ""
+                  if (b.items[0].price != undefined){
+                     price = b.items[0].price.regular;
+                  }
+                  await con.asyncQuery(`INSERT IGNORE INTO krogerFood VALUES(?,?,?,?,?,?,?,?,?,?)`,[b.productId,item,b.brand,b.countryOrigin,b.description,image,price,size,b.temperature.indicator,b.temperature.heatSensitive]);
                   total++;
                   console.log(total+"/"+res.length);
                } else {
