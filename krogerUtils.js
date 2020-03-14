@@ -1,4 +1,6 @@
 const request = require('request');
+var env = process.env.NODE_ENV || 'development';
+var config = require('./config')[env];
 
 function getToken(client_id, client_secret, callback) {
    let key = new Buffer(client_id+":"+client_secret).toString('base64');
@@ -30,6 +32,9 @@ function parseOptions(options) {
    if (options.fufillment != null) {query+="filter.fufillment="+options.fufillment+"&"}
    if (options.start      != null) {query+="filter.start="     +options.start+"&"}
    if (options.limit      != null) {query+="filter.limit="     +options.limit+"&"}
+   if (options.chain      != null) {query+="filter.chain="     +options.chain+"&"}
+   if (options.zipcode    != null) {query+="filter.zipCode.near="+options.zipcode+"&"}
+
    if(query.endsWith("&")) {query = query.substr(0,query.length-1);}
    return query;
 }
@@ -40,6 +45,12 @@ function listProducts(bearerToken, options, callback) {
    var domain = "products"
    var params = parseOptions(options);
    getQuery(bearerToken, domain, options.term, params, callback);
+}
+
+function getLocation(bearerToken, options, callback) {
+   var domain = "locations";
+   var params = parseOptions(options);
+   getQuery(bearerToken, domain,options.zipcode,params,callback);
 }
 
 
@@ -55,7 +66,7 @@ function getQuery(bearerToken, domain, item, query, callback){
          if (body.startsWith('<')) {
             callback({data:[]});
          }else if (callback) {
-            //console.log(query);
+            console.log(query);
             //console.log(body);
             callback(item,JSON.parse(body));
          }
@@ -64,10 +75,20 @@ function getQuery(bearerToken, domain, item, query, callback){
 }
 
 function test() {
-   getToken(client_id,client_secret,function(body) {
+   getToken(config.kroger.client_id,config.kroger.client_secret,function(body) {
       console.log(body.access_token);
+         getLocation(body.access_token,{chain:"FRED",zipcode:"97330",limit:1}, function(item,body) {
+            console.log(body);
+         });
+         listProducts(body.access_token, {term:"milk",locationId:"70100070",limit:1}, function(item,body) {
+            console.log(body);
+            console.log(body.data[0].items[0]);
+         });
    });
+
 }
+
+test();
 
 module.exports = {
    getToken: function(client_id,client_secret, callback) {
