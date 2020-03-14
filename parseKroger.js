@@ -7,15 +7,52 @@ var client_id = config.kroger.client_id;
 var client_secret = config.kroger.client_secret;
 
 con.start(config.database);
-kroger.getToken(client_id,client_secret, function(auth) {
-   var token = auth.access_token;
-   console.log(token);
-   var count = 2001;
-   while(count <= 37100) {
-      parse(token,count,100);
-      count=count+100;
-   }
-});
+
+runParse(15001,20000);
+async function runParse(start,end) {
+   kroger.getToken(client_id,client_secret, function(auth) {
+      var token = auth.access_token;
+      console.log(token);
+      var low = start;
+      var high = end;
+   //   var count = 7001;
+   //   while(count <= 12000) {
+         parse(token,low,high-low);
+   //      count=count+100;
+   //   }
+   });
+}
+//getPrices()
+async function getPrices(){
+   const [result] = await con.asyncQuery(`SELECT * FROM krogerFood WHERE price = '0' LIMIT 200`);
+   kroger.getToken(client_id,client_secret, async function(auth) {
+      var res = result;
+      //console.log(auth.access_token);
+      console.log(res.length);
+      //for (var i = 0; i < res/200; i++) {
+         //console.log(i);
+         console.log(res);
+         var sub = [];
+         //var sub = res.slice(i*200,i*200+200);
+         for (var k = 0; k < res.length; k++) {
+            sub.push(res[k].productId);
+         }
+         console.log(sub);
+         kroger.getProducts(auth.access_token,sub,{locationId:"70100070"}, async function(item,body){
+            for (var j = 0; j < body.data.length; j++) {
+               if (body.data[j].items[0].price != undefined){
+                  console.log(body.data[j].items[0])
+                  var price = body.data[j].items[0].price.regular;
+                  console.log(price);
+                  await con.asyncQuery(`UPDATE krogerFood SET price= ? WHERE productId = ?`,[price,sub[j]]);
+                  console.log(j);
+               }
+            }
+         });
+      //}
+   });
+}
+
 async function parse(token, start, limit) {
    console.log(start);
    var total = 0;
