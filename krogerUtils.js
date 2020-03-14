@@ -50,7 +50,7 @@ function listProducts(bearerToken, options, callback) {
 function getProducts(bearerToken, productIdList, options, callback) {
    var query = "filter.productId=";
    for (var i = 0; i < productIdList.length; i++) {
-      var id = "0".repeat(13-productIdList[i].length)+productIdList[i];
+      var id = "0".repeat(13-productIdList[i].toString().length)+productIdList[i].toString();
       query+=id+",";
    }
    params = parseOptions(options);
@@ -102,7 +102,7 @@ function test() {
 
 }
 
-test();
+//test();
 
 module.exports = {
    getToken: function(client_id,client_secret, callback) {
