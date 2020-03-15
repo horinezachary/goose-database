@@ -97,7 +97,7 @@ function test() {
          });
          getProducts(body.access_token,["2502","2554","3029"],{locationId:"70100070"}, function(item,body) {
             console.log(body);
-         })
+         });
    });
 
 }
@@ -113,5 +113,8 @@ module.exports = {
    },
    getProducts: function(token, productIdList, options, callback) {
       return getProducts(token, productIdList, options, callback);
+   },
+   getLocation: function(token, options, callback) {
+      return getLocation(bearerToken, options, callback);
    }
 }
