@@ -8,7 +8,7 @@ var client_secret = config.kroger.client_secret;
 
 con.start(config.database);
 
-runParse(15001,20000);
+runParse(30001,40000);
 async function runParse(start,end) {
    kroger.getToken(client_id,client_secret, function(auth) {
       var token = auth.access_token;
