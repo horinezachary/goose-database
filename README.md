@@ -5,7 +5,7 @@ This repository is for the development of the goose database system. While goose
 ### Database setup
 Import the `recipes_schema.sql` file into your mySQL server. This can be done by using the following command:
 ```bash
-mysql -u user -p recipes < recipes.sql  
+mysql -u user -p recipes < recipes_schema.sql  
 ```
 
 ### To run the frontend
